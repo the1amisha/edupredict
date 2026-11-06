@@ -41,7 +41,7 @@ def rule_band(row) -> str:
 
 
 def label_from_probability(p: float) -> str:
-    return 'High' if p >= .65 else 'Medium' if p >= .35 else 'Low'
+    return 'High' if p >= 0.50 else 'Medium' if p >= 0.35 else 'Low'
 
 
 def with_predictions(df: pd.DataFrame, bundle) -> pd.DataFrame:
