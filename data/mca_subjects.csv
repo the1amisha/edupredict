@@ -1,0 +1,9 @@
+subject_code,subject,professor,credits,classes_conducted,attendance_required,minimum_attendance_pct
+MCA-EL-2301,Object-Oriented Modeling and Design,Dr. Prakash Kumar,3,38,True,75.0
+MCA-EL-2302,Object-Oriented Modeling and Design Lab,Mr. Rahul Das,2,30,True,75.0
+MCA-EL-2303,Introduction to Machine Learning,Dr. Sandip Kumar Singh Modak,3,36,True,75.0
+MCA-SEC-2302,Machine Learning Lab using Python,Dr. Ragini Shukla,3,30,True,75.0
+MCA-SEC-2301,Cyber Law and Information Security,Dr. Priyanka Srivastava,3,36,True,75.0
+MCA-PCC-2302,Operations Research,Faculty not specified,4,38,True,75.0
+MCA-AEC-2301,Personality Development Program-II,Mr. C. S. Maheta,1,22,True,75.0
+MCA-P2301,Mini Project,Faculty not specified,2,0,False,

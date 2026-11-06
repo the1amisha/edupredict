@@ -9,3 +9,7 @@ models/*.joblib
 models/*.pkl
 .DS_Store
 .vscode/
+# Keep actual class files out of the public demonstration repository.
+*.xlsx
+*.xls
+data/private/

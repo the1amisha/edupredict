@@ -1,0 +1,273 @@
+student_id,name,subject_code,subject,classes_attended,classes_conducted,attendance_pct,attendance_status,classes_needed_to_75,assignment,internal
+DEMO-MCA-001,Aditi Mehra,MCA-EL-2301,Object-Oriented Modeling and Design,28,38,73.68,Below 75%,2,75,63
+DEMO-MCA-001,Aditi Mehra,MCA-EL-2302,Object-Oriented Modeling and Design Lab,26,30,86.67,Meets 75%,0,69,67
+DEMO-MCA-001,Aditi Mehra,MCA-EL-2303,Introduction to Machine Learning,27,36,75.0,Meets 75%,0,68,65
+DEMO-MCA-001,Aditi Mehra,MCA-SEC-2302,Machine Learning Lab using Python,22,30,73.33,Below 75%,2,64,72
+DEMO-MCA-001,Aditi Mehra,MCA-SEC-2301,Cyber Law and Information Security,30,36,83.33,Meets 75%,0,66,76
+DEMO-MCA-001,Aditi Mehra,MCA-PCC-2302,Operations Research,35,38,92.11,Meets 75%,0,81,91
+DEMO-MCA-001,Aditi Mehra,MCA-AEC-2301,Personality Development Program-II,16,22,72.73,Below 75%,2,54,67
+DEMO-MCA-001,Aditi Mehra,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-002,Arjun Bhat,MCA-EL-2301,Object-Oriented Modeling and Design,27,38,71.05,Below 75%,6,70,87
+DEMO-MCA-002,Arjun Bhat,MCA-EL-2302,Object-Oriented Modeling and Design Lab,23,30,76.67,Meets 75%,0,87,91
+DEMO-MCA-002,Arjun Bhat,MCA-EL-2303,Introduction to Machine Learning,27,36,75.0,Meets 75%,0,72,96
+DEMO-MCA-002,Arjun Bhat,MCA-SEC-2302,Machine Learning Lab using Python,26,30,86.67,Meets 75%,0,99,75
+DEMO-MCA-002,Arjun Bhat,MCA-SEC-2301,Cyber Law and Information Security,33,36,91.67,Meets 75%,0,78,99
+DEMO-MCA-002,Arjun Bhat,MCA-PCC-2302,Operations Research,30,38,78.95,Meets 75%,0,93,77
+DEMO-MCA-002,Arjun Bhat,MCA-AEC-2301,Personality Development Program-II,15,22,68.18,Below 75%,6,82,93
+DEMO-MCA-002,Arjun Bhat,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-003,Ishita Sen,MCA-EL-2301,Object-Oriented Modeling and Design,30,38,78.95,Meets 75%,0,41,41
+DEMO-MCA-003,Ishita Sen,MCA-EL-2302,Object-Oriented Modeling and Design Lab,27,30,90.0,Meets 75%,0,63,41
+DEMO-MCA-003,Ishita Sen,MCA-EL-2303,Introduction to Machine Learning,29,36,80.56,Meets 75%,0,49,76
+DEMO-MCA-003,Ishita Sen,MCA-SEC-2302,Machine Learning Lab using Python,25,30,83.33,Meets 75%,0,63,51
+DEMO-MCA-003,Ishita Sen,MCA-SEC-2301,Cyber Law and Information Security,31,36,86.11,Meets 75%,0,57,70
+DEMO-MCA-003,Ishita Sen,MCA-PCC-2302,Operations Research,29,38,76.32,Meets 75%,0,49,51
+DEMO-MCA-003,Ishita Sen,MCA-AEC-2301,Personality Development Program-II,20,22,90.91,Meets 75%,0,47,47
+DEMO-MCA-003,Ishita Sen,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-004,Raghav Jain,MCA-EL-2301,Object-Oriented Modeling and Design,31,38,81.58,Meets 75%,0,37,34
+DEMO-MCA-004,Raghav Jain,MCA-EL-2302,Object-Oriented Modeling and Design Lab,26,30,86.67,Meets 75%,0,83,51
+DEMO-MCA-004,Raghav Jain,MCA-EL-2303,Introduction to Machine Learning,34,36,94.44,Meets 75%,0,51,36
+DEMO-MCA-004,Raghav Jain,MCA-SEC-2302,Machine Learning Lab using Python,27,30,90.0,Meets 75%,0,57,71
+DEMO-MCA-004,Raghav Jain,MCA-SEC-2301,Cyber Law and Information Security,33,36,91.67,Meets 75%,0,68,62
+DEMO-MCA-004,Raghav Jain,MCA-PCC-2302,Operations Research,35,38,92.11,Meets 75%,0,37,58
+DEMO-MCA-004,Raghav Jain,MCA-AEC-2301,Personality Development Program-II,16,22,72.73,Below 75%,2,74,39
+DEMO-MCA-004,Raghav Jain,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-005,Anaya Kapoor,MCA-EL-2301,Object-Oriented Modeling and Design,35,38,92.11,Meets 75%,0,77,72
+DEMO-MCA-005,Anaya Kapoor,MCA-EL-2302,Object-Oriented Modeling and Design Lab,30,30,100.0,Meets 75%,0,99,84
+DEMO-MCA-005,Anaya Kapoor,MCA-EL-2303,Introduction to Machine Learning,36,36,100.0,Meets 75%,0,73,60
+DEMO-MCA-005,Anaya Kapoor,MCA-SEC-2302,Machine Learning Lab using Python,25,30,83.33,Meets 75%,0,63,73
+DEMO-MCA-005,Anaya Kapoor,MCA-SEC-2301,Cyber Law and Information Security,36,36,100.0,Meets 75%,0,99,71
+DEMO-MCA-005,Anaya Kapoor,MCA-PCC-2302,Operations Research,31,38,81.58,Meets 75%,0,63,78
+DEMO-MCA-005,Anaya Kapoor,MCA-AEC-2301,Personality Development Program-II,21,22,95.45,Meets 75%,0,99,98
+DEMO-MCA-005,Anaya Kapoor,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-006,Kunal Roy,MCA-EL-2301,Object-Oriented Modeling and Design,36,38,94.74,Meets 75%,0,69,67
+DEMO-MCA-006,Kunal Roy,MCA-EL-2302,Object-Oriented Modeling and Design Lab,27,30,90.0,Meets 75%,0,55,62
+DEMO-MCA-006,Kunal Roy,MCA-EL-2303,Introduction to Machine Learning,32,36,88.89,Meets 75%,0,78,73
+DEMO-MCA-006,Kunal Roy,MCA-SEC-2302,Machine Learning Lab using Python,30,30,100.0,Meets 75%,0,63,99
+DEMO-MCA-006,Kunal Roy,MCA-SEC-2301,Cyber Law and Information Security,27,36,75.0,Meets 75%,0,74,53
+DEMO-MCA-006,Kunal Roy,MCA-PCC-2302,Operations Research,38,38,100.0,Meets 75%,0,80,62
+DEMO-MCA-006,Kunal Roy,MCA-AEC-2301,Personality Development Program-II,22,22,100.0,Meets 75%,0,54,85
+DEMO-MCA-006,Kunal Roy,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-007,Meera Das,MCA-EL-2301,Object-Oriented Modeling and Design,38,38,100.0,Meets 75%,0,81,82
+DEMO-MCA-007,Meera Das,MCA-EL-2302,Object-Oriented Modeling and Design Lab,24,30,80.0,Meets 75%,0,80,73
+DEMO-MCA-007,Meera Das,MCA-EL-2303,Introduction to Machine Learning,30,36,83.33,Meets 75%,0,74,68
+DEMO-MCA-007,Meera Das,MCA-SEC-2302,Machine Learning Lab using Python,25,30,83.33,Meets 75%,0,75,67
+DEMO-MCA-007,Meera Das,MCA-SEC-2301,Cyber Law and Information Security,28,36,77.78,Meets 75%,0,70,67
+DEMO-MCA-007,Meera Das,MCA-PCC-2302,Operations Research,31,38,81.58,Meets 75%,0,73,66
+DEMO-MCA-007,Meera Das,MCA-AEC-2301,Personality Development Program-II,20,22,90.91,Meets 75%,0,76,68
+DEMO-MCA-007,Meera Das,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-008,Vivaan Khanna,MCA-EL-2301,Object-Oriented Modeling and Design,37,38,97.37,Meets 75%,0,85,79
+DEMO-MCA-008,Vivaan Khanna,MCA-EL-2302,Object-Oriented Modeling and Design Lab,27,30,90.0,Meets 75%,0,78,80
+DEMO-MCA-008,Vivaan Khanna,MCA-EL-2303,Introduction to Machine Learning,25,36,69.44,Below 75%,8,60,66
+DEMO-MCA-008,Vivaan Khanna,MCA-SEC-2302,Machine Learning Lab using Python,28,30,93.33,Meets 75%,0,68,54
+DEMO-MCA-008,Vivaan Khanna,MCA-SEC-2301,Cyber Law and Information Security,30,36,83.33,Meets 75%,0,65,62
+DEMO-MCA-008,Vivaan Khanna,MCA-PCC-2302,Operations Research,33,38,86.84,Meets 75%,0,71,62
+DEMO-MCA-008,Vivaan Khanna,MCA-AEC-2301,Personality Development Program-II,19,22,86.36,Meets 75%,0,70,67
+DEMO-MCA-008,Vivaan Khanna,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-009,Nisha Gupta,MCA-EL-2301,Object-Oriented Modeling and Design,38,38,100.0,Meets 75%,0,77,97
+DEMO-MCA-009,Nisha Gupta,MCA-EL-2302,Object-Oriented Modeling and Design Lab,30,30,100.0,Meets 75%,0,99,99
+DEMO-MCA-009,Nisha Gupta,MCA-EL-2303,Introduction to Machine Learning,36,36,100.0,Meets 75%,0,79,77
+DEMO-MCA-009,Nisha Gupta,MCA-SEC-2302,Machine Learning Lab using Python,30,30,100.0,Meets 75%,0,76,88
+DEMO-MCA-009,Nisha Gupta,MCA-SEC-2301,Cyber Law and Information Security,36,36,100.0,Meets 75%,0,90,87
+DEMO-MCA-009,Nisha Gupta,MCA-PCC-2302,Operations Research,37,38,97.37,Meets 75%,0,77,98
+DEMO-MCA-009,Nisha Gupta,MCA-AEC-2301,Personality Development Program-II,22,22,100.0,Meets 75%,0,75,91
+DEMO-MCA-009,Nisha Gupta,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-010,Kabir Malhotra,MCA-EL-2301,Object-Oriented Modeling and Design,27,38,71.05,Below 75%,6,37,15
+DEMO-MCA-010,Kabir Malhotra,MCA-EL-2302,Object-Oriented Modeling and Design Lab,16,30,53.33,Below 75%,26,39,41
+DEMO-MCA-010,Kabir Malhotra,MCA-EL-2303,Introduction to Machine Learning,29,36,80.56,Meets 75%,0,53,39
+DEMO-MCA-010,Kabir Malhotra,MCA-SEC-2302,Machine Learning Lab using Python,17,30,56.67,Below 75%,22,51,23
+DEMO-MCA-010,Kabir Malhotra,MCA-SEC-2301,Cyber Law and Information Security,31,36,86.11,Meets 75%,0,50,45
+DEMO-MCA-010,Kabir Malhotra,MCA-PCC-2302,Operations Research,23,38,60.53,Below 75%,22,52,37
+DEMO-MCA-010,Kabir Malhotra,MCA-AEC-2301,Personality Development Program-II,17,22,77.27,Meets 75%,0,39,43
+DEMO-MCA-010,Kabir Malhotra,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-011,Sneha Saxena,MCA-EL-2301,Object-Oriented Modeling and Design,26,38,68.42,Below 75%,10,68,71
+DEMO-MCA-011,Sneha Saxena,MCA-EL-2302,Object-Oriented Modeling and Design Lab,30,30,100.0,Meets 75%,0,82,77
+DEMO-MCA-011,Sneha Saxena,MCA-EL-2303,Introduction to Machine Learning,24,36,66.67,Below 75%,12,86,68
+DEMO-MCA-011,Sneha Saxena,MCA-SEC-2302,Machine Learning Lab using Python,27,30,90.0,Meets 75%,0,57,66
+DEMO-MCA-011,Sneha Saxena,MCA-SEC-2301,Cyber Law and Information Security,23,36,63.89,Below 75%,16,75,56
+DEMO-MCA-011,Sneha Saxena,MCA-PCC-2302,Operations Research,31,38,81.58,Meets 75%,0,66,61
+DEMO-MCA-011,Sneha Saxena,MCA-AEC-2301,Personality Development Program-II,16,22,72.73,Below 75%,2,64,61
+DEMO-MCA-011,Sneha Saxena,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-012,Riya Bose,MCA-EL-2301,Object-Oriented Modeling and Design,34,38,89.47,Meets 75%,0,71,59
+DEMO-MCA-012,Riya Bose,MCA-EL-2302,Object-Oriented Modeling and Design Lab,25,30,83.33,Meets 75%,0,89,63
+DEMO-MCA-012,Riya Bose,MCA-EL-2303,Introduction to Machine Learning,34,36,94.44,Meets 75%,0,63,58
+DEMO-MCA-012,Riya Bose,MCA-SEC-2302,Machine Learning Lab using Python,29,30,96.67,Meets 75%,0,70,65
+DEMO-MCA-012,Riya Bose,MCA-SEC-2301,Cyber Law and Information Security,27,36,75.0,Meets 75%,0,73,72
+DEMO-MCA-012,Riya Bose,MCA-PCC-2302,Operations Research,32,38,84.21,Meets 75%,0,70,78
+DEMO-MCA-012,Riya Bose,MCA-AEC-2301,Personality Development Program-II,17,22,77.27,Meets 75%,0,81,56
+DEMO-MCA-012,Riya Bose,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-013,Dev Sinha,MCA-EL-2301,Object-Oriented Modeling and Design,38,38,100.0,Meets 75%,0,99,80
+DEMO-MCA-013,Dev Sinha,MCA-EL-2302,Object-Oriented Modeling and Design Lab,29,30,96.67,Meets 75%,0,81,99
+DEMO-MCA-013,Dev Sinha,MCA-EL-2303,Introduction to Machine Learning,36,36,100.0,Meets 75%,0,96,99
+DEMO-MCA-013,Dev Sinha,MCA-SEC-2302,Machine Learning Lab using Python,29,30,96.67,Meets 75%,0,97,75
+DEMO-MCA-013,Dev Sinha,MCA-SEC-2301,Cyber Law and Information Security,34,36,94.44,Meets 75%,0,86,89
+DEMO-MCA-013,Dev Sinha,MCA-PCC-2302,Operations Research,38,38,100.0,Meets 75%,0,93,89
+DEMO-MCA-013,Dev Sinha,MCA-AEC-2301,Personality Development Program-II,22,22,100.0,Meets 75%,0,99,99
+DEMO-MCA-013,Dev Sinha,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-014,Diya Nair,MCA-EL-2301,Object-Oriented Modeling and Design,31,38,81.58,Meets 75%,0,46,29
+DEMO-MCA-014,Diya Nair,MCA-EL-2302,Object-Oriented Modeling and Design Lab,24,30,80.0,Meets 75%,0,50,50
+DEMO-MCA-014,Diya Nair,MCA-EL-2303,Introduction to Machine Learning,26,36,72.22,Below 75%,4,56,40
+DEMO-MCA-014,Diya Nair,MCA-SEC-2302,Machine Learning Lab using Python,25,30,83.33,Meets 75%,0,39,38
+DEMO-MCA-014,Diya Nair,MCA-SEC-2301,Cyber Law and Information Security,30,36,83.33,Meets 75%,0,32,37
+DEMO-MCA-014,Diya Nair,MCA-PCC-2302,Operations Research,31,38,81.58,Meets 75%,0,47,41
+DEMO-MCA-014,Diya Nair,MCA-AEC-2301,Personality Development Program-II,20,22,90.91,Meets 75%,0,36,32
+DEMO-MCA-014,Diya Nair,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-015,Aditya Mishra,MCA-EL-2301,Object-Oriented Modeling and Design,35,38,92.11,Meets 75%,0,89,99
+DEMO-MCA-015,Aditya Mishra,MCA-EL-2302,Object-Oriented Modeling and Design Lab,27,30,90.0,Meets 75%,0,99,86
+DEMO-MCA-015,Aditya Mishra,MCA-EL-2303,Introduction to Machine Learning,33,36,91.67,Meets 75%,0,86,99
+DEMO-MCA-015,Aditya Mishra,MCA-SEC-2302,Machine Learning Lab using Python,23,30,76.67,Meets 75%,0,76,98
+DEMO-MCA-015,Aditya Mishra,MCA-SEC-2301,Cyber Law and Information Security,36,36,100.0,Meets 75%,0,99,86
+DEMO-MCA-015,Aditya Mishra,MCA-PCC-2302,Operations Research,35,38,92.11,Meets 75%,0,93,95
+DEMO-MCA-015,Aditya Mishra,MCA-AEC-2301,Personality Development Program-II,18,22,81.82,Meets 75%,0,70,99
+DEMO-MCA-015,Aditya Mishra,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-016,Sanvi Rao,MCA-EL-2301,Object-Oriented Modeling and Design,36,38,94.74,Meets 75%,0,82,71
+DEMO-MCA-016,Sanvi Rao,MCA-EL-2302,Object-Oriented Modeling and Design Lab,30,30,100.0,Meets 75%,0,83,77
+DEMO-MCA-016,Sanvi Rao,MCA-EL-2303,Introduction to Machine Learning,33,36,91.67,Meets 75%,0,79,90
+DEMO-MCA-016,Sanvi Rao,MCA-SEC-2302,Machine Learning Lab using Python,23,30,76.67,Meets 75%,0,73,71
+DEMO-MCA-016,Sanvi Rao,MCA-SEC-2301,Cyber Law and Information Security,33,36,91.67,Meets 75%,0,84,66
+DEMO-MCA-016,Sanvi Rao,MCA-PCC-2302,Operations Research,34,38,89.47,Meets 75%,0,95,78
+DEMO-MCA-016,Sanvi Rao,MCA-AEC-2301,Personality Development Program-II,15,22,68.18,Below 75%,6,73,82
+DEMO-MCA-016,Sanvi Rao,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-017,Aman Pandey,MCA-EL-2301,Object-Oriented Modeling and Design,34,38,89.47,Meets 75%,0,65,74
+DEMO-MCA-017,Aman Pandey,MCA-EL-2302,Object-Oriented Modeling and Design Lab,27,30,90.0,Meets 75%,0,79,53
+DEMO-MCA-017,Aman Pandey,MCA-EL-2303,Introduction to Machine Learning,30,36,83.33,Meets 75%,0,80,55
+DEMO-MCA-017,Aman Pandey,MCA-SEC-2302,Machine Learning Lab using Python,28,30,93.33,Meets 75%,0,90,62
+DEMO-MCA-017,Aman Pandey,MCA-SEC-2301,Cyber Law and Information Security,30,36,83.33,Meets 75%,0,61,53
+DEMO-MCA-017,Aman Pandey,MCA-PCC-2302,Operations Research,35,38,92.11,Meets 75%,0,39,59
+DEMO-MCA-017,Aman Pandey,MCA-AEC-2301,Personality Development Program-II,18,22,81.82,Meets 75%,0,86,89
+DEMO-MCA-017,Aman Pandey,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-018,Nandini Ghosh,MCA-EL-2301,Object-Oriented Modeling and Design,34,38,89.47,Meets 75%,0,64,67
+DEMO-MCA-018,Nandini Ghosh,MCA-EL-2302,Object-Oriented Modeling and Design Lab,26,30,86.67,Meets 75%,0,68,55
+DEMO-MCA-018,Nandini Ghosh,MCA-EL-2303,Introduction to Machine Learning,36,36,100.0,Meets 75%,0,62,62
+DEMO-MCA-018,Nandini Ghosh,MCA-SEC-2302,Machine Learning Lab using Python,29,30,96.67,Meets 75%,0,66,67
+DEMO-MCA-018,Nandini Ghosh,MCA-SEC-2301,Cyber Law and Information Security,31,36,86.11,Meets 75%,0,53,70
+DEMO-MCA-018,Nandini Ghosh,MCA-PCC-2302,Operations Research,36,38,94.74,Meets 75%,0,69,39
+DEMO-MCA-018,Nandini Ghosh,MCA-AEC-2301,Personality Development Program-II,19,22,86.36,Meets 75%,0,58,67
+DEMO-MCA-018,Nandini Ghosh,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-019,Yash Anand,MCA-EL-2301,Object-Oriented Modeling and Design,37,38,97.37,Meets 75%,0,56,41
+DEMO-MCA-019,Yash Anand,MCA-EL-2302,Object-Oriented Modeling and Design Lab,29,30,96.67,Meets 75%,0,55,40
+DEMO-MCA-019,Yash Anand,MCA-EL-2303,Introduction to Machine Learning,30,36,83.33,Meets 75%,0,59,60
+DEMO-MCA-019,Yash Anand,MCA-SEC-2302,Machine Learning Lab using Python,28,30,93.33,Meets 75%,0,63,29
+DEMO-MCA-019,Yash Anand,MCA-SEC-2301,Cyber Law and Information Security,30,36,83.33,Meets 75%,0,28,38
+DEMO-MCA-019,Yash Anand,MCA-PCC-2302,Operations Research,33,38,86.84,Meets 75%,0,41,48
+DEMO-MCA-019,Yash Anand,MCA-AEC-2301,Personality Development Program-II,20,22,90.91,Meets 75%,0,52,76
+DEMO-MCA-019,Yash Anand,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-020,Kirti Sahu,MCA-EL-2301,Object-Oriented Modeling and Design,33,38,86.84,Meets 75%,0,50,55
+DEMO-MCA-020,Kirti Sahu,MCA-EL-2302,Object-Oriented Modeling and Design Lab,27,30,90.0,Meets 75%,0,61,45
+DEMO-MCA-020,Kirti Sahu,MCA-EL-2303,Introduction to Machine Learning,31,36,86.11,Meets 75%,0,49,45
+DEMO-MCA-020,Kirti Sahu,MCA-SEC-2302,Machine Learning Lab using Python,25,30,83.33,Meets 75%,0,47,41
+DEMO-MCA-020,Kirti Sahu,MCA-SEC-2301,Cyber Law and Information Security,31,36,86.11,Meets 75%,0,47,37
+DEMO-MCA-020,Kirti Sahu,MCA-PCC-2302,Operations Research,32,38,84.21,Meets 75%,0,50,42
+DEMO-MCA-020,Kirti Sahu,MCA-AEC-2301,Personality Development Program-II,16,22,72.73,Below 75%,2,36,27
+DEMO-MCA-020,Kirti Sahu,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-021,Pooja Prasad,MCA-EL-2301,Object-Oriented Modeling and Design,36,38,94.74,Meets 75%,0,72,92
+DEMO-MCA-021,Pooja Prasad,MCA-EL-2302,Object-Oriented Modeling and Design Lab,30,30,100.0,Meets 75%,0,99,95
+DEMO-MCA-021,Pooja Prasad,MCA-EL-2303,Introduction to Machine Learning,32,36,88.89,Meets 75%,0,65,79
+DEMO-MCA-021,Pooja Prasad,MCA-SEC-2302,Machine Learning Lab using Python,28,30,93.33,Meets 75%,0,99,86
+DEMO-MCA-021,Pooja Prasad,MCA-SEC-2301,Cyber Law and Information Security,35,36,97.22,Meets 75%,0,84,76
+DEMO-MCA-021,Pooja Prasad,MCA-PCC-2302,Operations Research,38,38,100.0,Meets 75%,0,88,98
+DEMO-MCA-021,Pooja Prasad,MCA-AEC-2301,Personality Development Program-II,22,22,100.0,Meets 75%,0,94,93
+DEMO-MCA-021,Pooja Prasad,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-022,Rohan Verma,MCA-EL-2301,Object-Oriented Modeling and Design,31,38,81.58,Meets 75%,0,67,71
+DEMO-MCA-022,Rohan Verma,MCA-EL-2302,Object-Oriented Modeling and Design Lab,22,30,73.33,Below 75%,2,82,72
+DEMO-MCA-022,Rohan Verma,MCA-EL-2303,Introduction to Machine Learning,26,36,72.22,Below 75%,4,72,72
+DEMO-MCA-022,Rohan Verma,MCA-SEC-2302,Machine Learning Lab using Python,24,30,80.0,Meets 75%,0,84,79
+DEMO-MCA-022,Rohan Verma,MCA-SEC-2301,Cyber Law and Information Security,32,36,88.89,Meets 75%,0,78,62
+DEMO-MCA-022,Rohan Verma,MCA-PCC-2302,Operations Research,23,38,60.53,Below 75%,22,54,60
+DEMO-MCA-022,Rohan Verma,MCA-AEC-2301,Personality Development Program-II,18,22,81.82,Meets 75%,0,72,55
+DEMO-MCA-022,Rohan Verma,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-023,Avni Joshi,MCA-EL-2301,Object-Oriented Modeling and Design,22,38,57.89,Below 75%,26,63,64
+DEMO-MCA-023,Avni Joshi,MCA-EL-2302,Object-Oriented Modeling and Design Lab,21,30,70.0,Below 75%,6,70,45
+DEMO-MCA-023,Avni Joshi,MCA-EL-2303,Introduction to Machine Learning,33,36,91.67,Meets 75%,0,59,70
+DEMO-MCA-023,Avni Joshi,MCA-SEC-2302,Machine Learning Lab using Python,25,30,83.33,Meets 75%,0,58,62
+DEMO-MCA-023,Avni Joshi,MCA-SEC-2301,Cyber Law and Information Security,27,36,75.0,Meets 75%,0,74,63
+DEMO-MCA-023,Avni Joshi,MCA-PCC-2302,Operations Research,26,38,68.42,Below 75%,10,46,55
+DEMO-MCA-023,Avni Joshi,MCA-AEC-2301,Personality Development Program-II,18,22,81.82,Meets 75%,0,40,68
+DEMO-MCA-023,Avni Joshi,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-024,Tanya Singh,MCA-EL-2301,Object-Oriented Modeling and Design,38,38,100.0,Meets 75%,0,89,86
+DEMO-MCA-024,Tanya Singh,MCA-EL-2302,Object-Oriented Modeling and Design Lab,25,30,83.33,Meets 75%,0,84,91
+DEMO-MCA-024,Tanya Singh,MCA-EL-2303,Introduction to Machine Learning,27,36,75.0,Meets 75%,0,83,79
+DEMO-MCA-024,Tanya Singh,MCA-SEC-2302,Machine Learning Lab using Python,21,30,70.0,Below 75%,6,65,81
+DEMO-MCA-024,Tanya Singh,MCA-SEC-2301,Cyber Law and Information Security,33,36,91.67,Meets 75%,0,81,80
+DEMO-MCA-024,Tanya Singh,MCA-PCC-2302,Operations Research,33,38,86.84,Meets 75%,0,81,75
+DEMO-MCA-024,Tanya Singh,MCA-AEC-2301,Personality Development Program-II,19,22,86.36,Meets 75%,0,76,87
+DEMO-MCA-024,Tanya Singh,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-025,Neha Shah,MCA-EL-2301,Object-Oriented Modeling and Design,37,38,97.37,Meets 75%,0,93,93
+DEMO-MCA-025,Neha Shah,MCA-EL-2302,Object-Oriented Modeling and Design Lab,23,30,76.67,Meets 75%,0,67,77
+DEMO-MCA-025,Neha Shah,MCA-EL-2303,Introduction to Machine Learning,33,36,91.67,Meets 75%,0,86,65
+DEMO-MCA-025,Neha Shah,MCA-SEC-2302,Machine Learning Lab using Python,27,30,90.0,Meets 75%,0,73,70
+DEMO-MCA-025,Neha Shah,MCA-SEC-2301,Cyber Law and Information Security,33,36,91.67,Meets 75%,0,80,76
+DEMO-MCA-025,Neha Shah,MCA-PCC-2302,Operations Research,33,38,86.84,Meets 75%,0,80,89
+DEMO-MCA-025,Neha Shah,MCA-AEC-2301,Personality Development Program-II,20,22,90.91,Meets 75%,0,73,87
+DEMO-MCA-025,Neha Shah,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-026,Siddharth Kumar,MCA-EL-2301,Object-Oriented Modeling and Design,38,38,100.0,Meets 75%,0,92,77
+DEMO-MCA-026,Siddharth Kumar,MCA-EL-2302,Object-Oriented Modeling and Design Lab,30,30,100.0,Meets 75%,0,88,77
+DEMO-MCA-026,Siddharth Kumar,MCA-EL-2303,Introduction to Machine Learning,36,36,100.0,Meets 75%,0,67,66
+DEMO-MCA-026,Siddharth Kumar,MCA-SEC-2302,Machine Learning Lab using Python,30,30,100.0,Meets 75%,0,71,63
+DEMO-MCA-026,Siddharth Kumar,MCA-SEC-2301,Cyber Law and Information Security,36,36,100.0,Meets 75%,0,77,69
+DEMO-MCA-026,Siddharth Kumar,MCA-PCC-2302,Operations Research,38,38,100.0,Meets 75%,0,67,74
+DEMO-MCA-026,Siddharth Kumar,MCA-AEC-2301,Personality Development Program-II,21,22,95.45,Meets 75%,0,81,70
+DEMO-MCA-026,Siddharth Kumar,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-027,Simran Dutta,MCA-EL-2301,Object-Oriented Modeling and Design,34,38,89.47,Meets 75%,0,66,60
+DEMO-MCA-027,Simran Dutta,MCA-EL-2302,Object-Oriented Modeling and Design Lab,26,30,86.67,Meets 75%,0,91,83
+DEMO-MCA-027,Simran Dutta,MCA-EL-2303,Introduction to Machine Learning,20,36,55.56,Below 75%,28,70,65
+DEMO-MCA-027,Simran Dutta,MCA-SEC-2302,Machine Learning Lab using Python,23,30,76.67,Meets 75%,0,66,70
+DEMO-MCA-027,Simran Dutta,MCA-SEC-2301,Cyber Law and Information Security,34,36,94.44,Meets 75%,0,70,73
+DEMO-MCA-027,Simran Dutta,MCA-PCC-2302,Operations Research,35,38,92.11,Meets 75%,0,88,81
+DEMO-MCA-027,Simran Dutta,MCA-AEC-2301,Personality Development Program-II,17,22,77.27,Meets 75%,0,82,81
+DEMO-MCA-027,Simran Dutta,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-028,Varun Patel,MCA-EL-2301,Object-Oriented Modeling and Design,38,38,100.0,Meets 75%,0,69,78
+DEMO-MCA-028,Varun Patel,MCA-EL-2302,Object-Oriented Modeling and Design Lab,29,30,96.67,Meets 75%,0,78,74
+DEMO-MCA-028,Varun Patel,MCA-EL-2303,Introduction to Machine Learning,36,36,100.0,Meets 75%,0,80,73
+DEMO-MCA-028,Varun Patel,MCA-SEC-2302,Machine Learning Lab using Python,29,30,96.67,Meets 75%,0,70,45
+DEMO-MCA-028,Varun Patel,MCA-SEC-2301,Cyber Law and Information Security,33,36,91.67,Meets 75%,0,82,71
+DEMO-MCA-028,Varun Patel,MCA-PCC-2302,Operations Research,38,38,100.0,Meets 75%,0,56,66
+DEMO-MCA-028,Varun Patel,MCA-AEC-2301,Personality Development Program-II,20,22,90.91,Meets 75%,0,68,64
+DEMO-MCA-028,Varun Patel,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-029,Priya Banerjee,MCA-EL-2301,Object-Oriented Modeling and Design,29,38,76.32,Meets 75%,0,56,55
+DEMO-MCA-029,Priya Banerjee,MCA-EL-2302,Object-Oriented Modeling and Design Lab,28,30,93.33,Meets 75%,0,51,58
+DEMO-MCA-029,Priya Banerjee,MCA-EL-2303,Introduction to Machine Learning,26,36,72.22,Below 75%,4,47,44
+DEMO-MCA-029,Priya Banerjee,MCA-SEC-2302,Machine Learning Lab using Python,30,30,100.0,Meets 75%,0,65,71
+DEMO-MCA-029,Priya Banerjee,MCA-SEC-2301,Cyber Law and Information Security,34,36,94.44,Meets 75%,0,76,75
+DEMO-MCA-029,Priya Banerjee,MCA-PCC-2302,Operations Research,35,38,92.11,Meets 75%,0,72,44
+DEMO-MCA-029,Priya Banerjee,MCA-AEC-2301,Personality Development Program-II,21,22,95.45,Meets 75%,0,56,44
+DEMO-MCA-029,Priya Banerjee,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-030,Aryan Sethi,MCA-EL-2301,Object-Oriented Modeling and Design,32,38,84.21,Meets 75%,0,78,42
+DEMO-MCA-030,Aryan Sethi,MCA-EL-2302,Object-Oriented Modeling and Design Lab,26,30,86.67,Meets 75%,0,71,64
+DEMO-MCA-030,Aryan Sethi,MCA-EL-2303,Introduction to Machine Learning,32,36,88.89,Meets 75%,0,88,46
+DEMO-MCA-030,Aryan Sethi,MCA-SEC-2302,Machine Learning Lab using Python,26,30,86.67,Meets 75%,0,77,47
+DEMO-MCA-030,Aryan Sethi,MCA-SEC-2301,Cyber Law and Information Security,35,36,97.22,Meets 75%,0,86,58
+DEMO-MCA-030,Aryan Sethi,MCA-PCC-2302,Operations Research,32,38,84.21,Meets 75%,0,60,62
+DEMO-MCA-030,Aryan Sethi,MCA-AEC-2301,Personality Development Program-II,20,22,90.91,Meets 75%,0,77,88
+DEMO-MCA-030,Aryan Sethi,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-031,Ayesha Ali,MCA-EL-2301,Object-Oriented Modeling and Design,25,38,65.79,Below 75%,14,78,77
+DEMO-MCA-031,Ayesha Ali,MCA-EL-2302,Object-Oriented Modeling and Design Lab,20,30,66.67,Below 75%,10,78,79
+DEMO-MCA-031,Ayesha Ali,MCA-EL-2303,Introduction to Machine Learning,26,36,72.22,Below 75%,4,71,81
+DEMO-MCA-031,Ayesha Ali,MCA-SEC-2302,Machine Learning Lab using Python,22,30,73.33,Below 75%,2,47,63
+DEMO-MCA-031,Ayesha Ali,MCA-SEC-2301,Cyber Law and Information Security,25,36,69.44,Below 75%,8,47,77
+DEMO-MCA-031,Ayesha Ali,MCA-PCC-2302,Operations Research,32,38,84.21,Meets 75%,0,85,50
+DEMO-MCA-031,Ayesha Ali,MCA-AEC-2301,Personality Development Program-II,11,22,50.0,Below 75%,22,65,58
+DEMO-MCA-031,Ayesha Ali,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-032,Manav Saxena,MCA-EL-2301,Object-Oriented Modeling and Design,35,38,92.11,Meets 75%,0,76,42
+DEMO-MCA-032,Manav Saxena,MCA-EL-2302,Object-Oriented Modeling and Design Lab,29,30,96.67,Meets 75%,0,76,65
+DEMO-MCA-032,Manav Saxena,MCA-EL-2303,Introduction to Machine Learning,33,36,91.67,Meets 75%,0,62,55
+DEMO-MCA-032,Manav Saxena,MCA-SEC-2302,Machine Learning Lab using Python,22,30,73.33,Below 75%,2,60,57
+DEMO-MCA-032,Manav Saxena,MCA-SEC-2301,Cyber Law and Information Security,32,36,88.89,Meets 75%,0,70,52
+DEMO-MCA-032,Manav Saxena,MCA-PCC-2302,Operations Research,32,38,84.21,Meets 75%,0,48,49
+DEMO-MCA-032,Manav Saxena,MCA-AEC-2301,Personality Development Program-II,19,22,86.36,Meets 75%,0,70,59
+DEMO-MCA-032,Manav Saxena,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-033,Ritu Das,MCA-EL-2301,Object-Oriented Modeling and Design,29,38,76.32,Meets 75%,0,53,56
+DEMO-MCA-033,Ritu Das,MCA-EL-2302,Object-Oriented Modeling and Design Lab,21,30,70.0,Below 75%,6,59,64
+DEMO-MCA-033,Ritu Das,MCA-EL-2303,Introduction to Machine Learning,31,36,86.11,Meets 75%,0,74,63
+DEMO-MCA-033,Ritu Das,MCA-SEC-2302,Machine Learning Lab using Python,22,30,73.33,Below 75%,2,83,58
+DEMO-MCA-033,Ritu Das,MCA-SEC-2301,Cyber Law and Information Security,32,36,88.89,Meets 75%,0,83,70
+DEMO-MCA-033,Ritu Das,MCA-PCC-2302,Operations Research,27,38,71.05,Below 75%,6,67,41
+DEMO-MCA-033,Ritu Das,MCA-AEC-2301,Personality Development Program-II,18,22,81.82,Meets 75%,0,61,75
+DEMO-MCA-033,Ritu Das,MCA-P2301,Mini Project,,,,Exempt,,,
+DEMO-MCA-034,Harsh Sharma,MCA-EL-2301,Object-Oriented Modeling and Design,38,38,100.0,Meets 75%,0,78,52
+DEMO-MCA-034,Harsh Sharma,MCA-EL-2302,Object-Oriented Modeling and Design Lab,29,30,96.67,Meets 75%,0,69,66
+DEMO-MCA-034,Harsh Sharma,MCA-EL-2303,Introduction to Machine Learning,33,36,91.67,Meets 75%,0,66,91
+DEMO-MCA-034,Harsh Sharma,MCA-SEC-2302,Machine Learning Lab using Python,27,30,90.0,Meets 75%,0,60,62
+DEMO-MCA-034,Harsh Sharma,MCA-SEC-2301,Cyber Law and Information Security,36,36,100.0,Meets 75%,0,78,74
+DEMO-MCA-034,Harsh Sharma,MCA-PCC-2302,Operations Research,38,38,100.0,Meets 75%,0,78,68
+DEMO-MCA-034,Harsh Sharma,MCA-AEC-2301,Personality Development Program-II,22,22,100.0,Meets 75%,0,78,77
+DEMO-MCA-034,Harsh Sharma,MCA-P2301,Mini Project,,,,Exempt,,,

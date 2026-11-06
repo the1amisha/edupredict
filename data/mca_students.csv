@@ -1,0 +1,35 @@
+student_id,name,attendance,assignment,internal,attendance_eligibility,subjects_below_75
+DEMO-MCA-001,Aditi Mehra,80,68,72,Below 75% in subject(s),3
+DEMO-MCA-002,Arjun Bhat,79,83,88,Below 75% in subject(s),2
+DEMO-MCA-003,Ishita Sen,83,53,54,Meets attendance rule,0
+DEMO-MCA-004,Raghav Jain,88,58,50,Below 75% in subject(s),1
+DEMO-MCA-005,Anaya Kapoor,93,82,77,Meets attendance rule,0
+DEMO-MCA-006,Kunal Roy,92,68,72,Meets attendance rule,0
+DEMO-MCA-007,Meera Das,85,76,70,Meets attendance rule,0
+DEMO-MCA-008,Vivaan Khanna,87,71,67,Below 75% in subject(s),1
+DEMO-MCA-009,Nisha Gupta,100,82,91,Meets attendance rule,0
+DEMO-MCA-010,Kabir Malhotra,70,46,35,Below 75% in subject(s),4
+DEMO-MCA-011,Sneha Saxena,77,71,66,Below 75% in subject(s),4
+DEMO-MCA-012,Riya Bose,86,74,64,Meets attendance rule,0
+DEMO-MCA-013,Dev Sinha,98,93,90,Meets attendance rule,0
+DEMO-MCA-014,Diya Nair,81,44,38,Below 75% in subject(s),1
+DEMO-MCA-015,Aditya Mishra,90,87,95,Meets attendance rule,0
+DEMO-MCA-016,Sanvi Rao,89,81,76,Below 75% in subject(s),1
+DEMO-MCA-017,Aman Pandey,88,71,64,Meets attendance rule,0
+DEMO-MCA-018,Nandini Ghosh,92,63,61,Meets attendance rule,0
+DEMO-MCA-019,Yash Anand,90,51,47,Meets attendance rule,0
+DEMO-MCA-020,Kirti Sahu,85,49,42,Below 75% in subject(s),1
+DEMO-MCA-021,Pooja Prasad,96,86,88,Meets attendance rule,0
+DEMO-MCA-022,Rohan Verma,77,73,67,Below 75% in subject(s),3
+DEMO-MCA-023,Avni Joshi,75,59,61,Below 75% in subject(s),3
+DEMO-MCA-024,Tanya Singh,85,80,83,Below 75% in subject(s),1
+DEMO-MCA-025,Neha Shah,90,79,80,Meets attendance rule,0
+DEMO-MCA-026,Siddharth Kumar,100,78,71,Meets attendance rule,0
+DEMO-MCA-027,Simran Dutta,82,76,73,Below 75% in subject(s),1
+DEMO-MCA-028,Varun Patel,97,72,67,Meets attendance rule,0
+DEMO-MCA-029,Priya Banerjee,88,60,56,Below 75% in subject(s),1
+DEMO-MCA-030,Aryan Sethi,88,77,58,Meets attendance rule,0
+DEMO-MCA-031,Ayesha Ali,70,67,69,Below 75% in subject(s),6
+DEMO-MCA-032,Manav Saxena,88,66,54,Below 75% in subject(s),1
+DEMO-MCA-033,Ritu Das,78,69,61,Below 75% in subject(s),3
+DEMO-MCA-034,Harsh Sharma,97,72,70,Meets attendance rule,0

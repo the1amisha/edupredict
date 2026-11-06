@@ -16,8 +16,16 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from student_profile import subject_profile_rows, academic_support
+
 ROOT = Path(__file__).resolve().parent
-DATA_PATH = ROOT / 'data' / 'demo_students.csv'
+PRIVATE_DATA = ROOT / 'data' / 'private'
+USE_LOCAL_ROSTER = all((PRIVATE_DATA / file).exists() for file in ('mca_students.csv','mca_subject_records.csv'))
+DATA_PATH = (PRIVATE_DATA if USE_LOCAL_ROSTER else ROOT / 'data') / 'mca_students.csv'
+SUBJECTS_PATH = ROOT / 'data' / 'mca_subjects.csv'
+SUBJECT_RECORDS_PATH = (PRIVATE_DATA if USE_LOCAL_ROSTER else ROOT / 'data') / 'mca_subject_records.csv'
+IDENTITY_NOTE = ('Names and generated SBU IDs exactly as supplied in the class directory; attendance and marks are simulated.'
+                 if USE_LOCAL_ROSTER else 'Fictional identities and simulated academic data.')
 MODEL_PATH = ROOT / 'models' / 'risk_model.joblib'
 FEATURES = ['attendance', 'assignment', 'internal']
 
@@ -26,6 +34,19 @@ st.set_page_config(page_title='EduPredict · Student risk dashboard', page_icon=
 @st.cache_data
 def load_students() -> pd.DataFrame:
     return pd.read_csv(DATA_PATH)
+
+@st.cache_data
+def load_subjects() -> pd.DataFrame:
+    return pd.read_csv(SUBJECTS_PATH)
+
+
+@st.cache_data
+def load_subject_records() -> pd.DataFrame:
+    df = pd.read_csv(SUBJECT_RECORDS_PATH)
+    for col in ['classes_attended','classes_conducted','classes_needed_to_75','assignment','internal']:
+        df[col] = df[col].astype('Int64')
+    return df
+
 
 @st.cache_resource
 def load_model(model_mtime: float | None):
@@ -40,8 +61,18 @@ def rule_band(row) -> str:
     return 'High' if score < 50 else 'Medium' if score < 70 else 'Low'
 
 
-def label_from_probability(p: float) -> str:
-    return 'High' if p >= 0.50 else 'Medium' if p >= 0.35 else 'Low'
+def label_from_probability(p: float, decision_threshold: float = 0.50) -> str:
+    """Make High risk match the model's predicted Fail class.
+
+    Medium marks students approaching the failure decision threshold,
+    not a second classification learned by the ML model.
+    """
+    caution_threshold = max(0.0, decision_threshold - 0.15)
+    if p >= decision_threshold:
+        return 'High'
+    if p >= caution_threshold:
+        return 'Medium'
+    return 'Low'
 
 
 def with_predictions(df: pd.DataFrame, bundle) -> pd.DataFrame:
@@ -53,7 +84,7 @@ def with_predictions(df: pd.DataFrame, bundle) -> pd.DataFrame:
         model = bundle['model']
         fail_idx = list(model.classes_).index(1)
         df['fail_probability'] = model.predict_proba(df[FEATURES])[:, fail_idx]
-        df['risk'] = df['fail_probability'].map(label_from_probability)
+        df['risk'] = df['fail_probability'].map(lambda p: label_from_probability(p, bundle.get('decision_threshold', 0.50)))
     return df
 
 
@@ -175,6 +206,13 @@ html, body, [data-testid="stAppViewContainer"], .stApp {background:#ded9d0!impor
 [data-testid="stForm"]{border:1px solid #ded9ce!important;border-radius:15px!important;background:#f7f5ef!important;}
 .st-key-app_shell p{line-height:1.5;}
 @media(max-width:900px){.block-container{padding:10px 8px 24px!important}.st-key-app_shell{padding:8px!important}.st-key-sidebar{min-height:500px}.feature-grid{grid-template-columns:1fr}.hero-title{font-size:21px}.student-table th,.student-table td{padding:8px 4px;font-size:9px}.mini-track{display:none}.donut-row{gap:6px}.donut{height:89px;width:89px}.donut:before{inset:12px}.sidebar-bottom{padding-top:12px;}}
+
+/* Student Profiles page: match the charcoal/cream/gold dashboard */
+.profile-banner {border:1px solid #e1dbcf;border-radius:16px;background:#f2efe8;padding:16px 19px;margin:7px 0 17px;}
+.profile-banner strong{font-family:Georgia,serif;font-size:21px;color:#867039;display:block;}
+.profile-banner span{color:#898278;font-size:12px;display:block;margin-top:5px;}
+.profile-section-title{font-family:Georgia,serif;color:#987b37;font-size:19px;font-weight:700;padding:8px 0;}
+.profile-smallprint{color:#898278;font-size:12px;line-height:1.7;margin:6px 0 14px;}
 </style>
 '''
 
@@ -183,6 +221,8 @@ st.markdown(CSS, unsafe_allow_html=True)
 NAV = [
     ('Overview', ':material/dashboard:'),
     ('Students', ':material/groups:'),
+    ('Profiles', ':material/person:'),
+    ('Subjects', ':material/menu_book:'),
     ('Predict', ':material/insights:'),
     ('Analytics', ':material/bar_chart:'),
     ('Reports', ':material/description:'),
@@ -194,6 +234,8 @@ active = st.session_state.page
 st.markdown(f'<style>.st-key-nav_{active} button{{background:linear-gradient(105deg,#90722f,#b39751)!important;color:white!important;font-weight:650!important;}}</style>', unsafe_allow_html=True)
 
 raw = load_students()
+subject_catalog = load_subjects()
+subject_records = load_subject_records()
 bundle = load_model(MODEL_PATH.stat().st_mtime if MODEL_PATH.exists() else None)
 students = with_predictions(raw, bundle)
 mode = 'ML demo' if bundle else 'Rule-based demo'
@@ -214,17 +256,17 @@ def student_table(frame: pd.DataFrame, limit: int = 6) -> str:
         lines.append(f'''<tr><td class="student-name">{name}<small>{rid}</small></td>
         <td>{att}% <span class="mini-track"><span class="mini-fill" style="width:{att}%"></span></span></td>
         <td>{int(row['assignment'])}%</td><td>{int(row['internal'])}%</td>
-        <td><span class="risk-chip risk-{risk}">{risk}</span></td></tr>''')
-    return f'''<div class="data-card"><div class="table-heading"><strong>Student risk overview</strong><small>{len(frame)} records</small></div>
-    <div style="overflow-x:auto"><table class="student-table"><thead><tr><th>STUDENT</th><th>ATTENDANCE</th><th>ASSIGNMENT</th><th>INTERNAL</th><th>RISK</th></tr></thead>
-    <tbody>{''.join(lines) if lines else '<tr><td colspan="5">No matching students.</td></tr>'}</tbody></table></div></div>'''
+        <td><span class="risk-chip risk-{risk}">{risk}</span></td><td>{'Shortage' if int(row['subjects_below_75']) else 'Meets 75%'}</td></tr>''')
+    return f'''<div class="data-card"><div class="table-heading"><strong>MCA Semester 3 student risk overview</strong><small>{len(frame)} records</small></div>
+    <div style="overflow-x:auto"><table class="student-table"><thead><tr><th>STUDENT</th><th>ATTENDANCE</th><th>ASSIGNMENT</th><th>INTERNAL</th><th>RISK</th><th>ATTENDANCE RULE</th></tr></thead>
+    <tbody>{''.join(lines) if lines else '<tr><td colspan="6">No matching students.</td></tr>'}</tbody></table></div></div>'''
 
 
 def metric_cards() -> str:
     return f'''<div class="feature-grid">
      <div class="feature-card"><div class="feature-head">Students Monitored</div><div class="feature-body"><div><div class="feature-value">{len(students)}</div><div class="feature-note">Across the demo class</div></div><div class="feature-illustration">{icon_svg('students', 39)}</div></div></div>
      <div class="feature-card risky"><div class="feature-head">Students At Risk</div><div class="feature-body"><div><div class="feature-value">{high}</div><div class="feature-note">High-priority review</div></div><div class="feature-illustration">{icon_svg('alert', 36)}</div></div></div>
-     <div class="feature-card"><div class="feature-head">Average Attendance</div><div class="feature-body"><div><div class="feature-value">{students['attendance'].mean():.0f}%</div><div class="feature-note">Based on available records</div></div><div class="feature-illustration">{icon_svg('assessment', 38)}</div></div></div>
+     <div class="feature-card"><div class="feature-head">Average Attendance</div><div class="feature-body"><div><div class="feature-value">{students['attendance'].mean():.0f}%</div><div class="feature-note">7 attendance-required subjects</div></div><div class="feature-illustration">{icon_svg('assessment', 38)}</div></div></div>
      </div>'''
 
 
@@ -267,24 +309,167 @@ def right_panel() -> None:
     for date, title, sub in zip(milestones,['Attendance review','Assignment check','Practice assessment'],['Check missing classes','Review submissions','Sample class exercise']):
         events_html += f'<div class="side-event"><div class="date-box">{date.strftime("%d")}<br>{date.strftime("%b").upper()}</div><div><strong>{title}</strong><small>{sub}</small></div></div>'
     st.markdown(f'<div class="side-card"><div class="side-title">Upcoming Reviews</div><div class="side-list">{events_html}</div></div>',unsafe_allow_html=True)
-    missed = int((students['attendance'] < 60).sum())
+    missed = int((students['subjects_below_75'] > 0).sum())
     st.markdown(f'''<div class="side-card"><div class="side-title">Student Alerts</div>
      <div class="alert-box"><div class="alert-circle">!</div><div><strong>{high} high-risk students</strong><small>Prioritise academic support</small></div></div>
-     <div class="alert-box"><div class="alert-circle">↘</div><div><strong>{missed} below 60% attendance</strong><small>Consider attendance follow-up</small></div></div></div>''', unsafe_allow_html=True)
+     <div class="alert-box"><div class="alert-circle">↘</div><div><strong>{missed} with subject attendance shortage</strong><small>75% required for seven subjects</small></div></div></div>''', unsafe_allow_html=True)
 
 
 def student_view(df: pd.DataFrame):
-    st.markdown('<div class="page-heading">Students</div><div class="page-description">Explore the demo class, search records and review their risk indicators.</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="page-heading">MCA Semester 3 · Students</div><div class="page-description">{escape(IDENTITY_NOTE)} Academic risk and attendance eligibility are separate indicators.</div>', unsafe_allow_html=True)
     with st.container(key='page_panel'):
-        left, right = st.columns([2,1])
+        left, right = st.columns([2, 1])
         with left:
             st.markdown('### Class records')
         with right:
-            selected = st.selectbox('Risk category', ['All','High','Medium','Low'], label_visibility='collapsed', key='risk_filter')
+            selected = st.selectbox('Risk category', ['All','High','Medium','Low'], key='risk_filter')
         filtered = df if selected == 'All' else df[df['risk'] == selected]
-        st.dataframe(filtered[['student_id','name','attendance','assignment','internal','risk']], hide_index=True, use_container_width=True, height=480,
-            column_config={'student_id':'Student ID','name':'Student','attendance':'Attendance (%)','assignment':'Assignments (%)','internal':'Internal (%)','risk':'Risk'} )
-        st.caption(f'{len(filtered)} synthetic records · {mode}')
+        columns = ['student_id','name','attendance','assignment','internal','risk','subjects_below_75','attendance_eligibility']
+        st.dataframe(filtered[columns], hide_index=True, use_container_width=True, height=320,
+            column_config={'student_id':'SBU ID' if USE_LOCAL_ROSTER else 'Demo ID','name':'Student','attendance':'Overall attendance (%)',
+                           'assignment':'Assignment mean (%)','internal':'Internal mean (%)',
+                           'risk':'ML risk','subjects_below_75':'Subjects below 75%',
+                           'attendance_eligibility':'Attendance status'})
+        st.caption(f'{len(filtered)} class records · {mode}. Marks and attendance are simulated, not official. Overall attendance does NOT replace subject-specific checks.')
+
+        st.markdown('### View a student’s subject-wise record')
+        choices = students.set_index('student_id')['name'].to_dict()
+        selected_id = st.selectbox('Student', options=list(choices),
+                                  format_func=lambda sid: f'{choices[sid]} ({sid})', key='student_details')
+        pupil = students.loc[students['student_id'] == selected_id].iloc[0]
+        p1, p2, p3 = st.columns(3)
+        p1.metric('Overall attendance', f"{int(pupil['attendance'])}%")
+        p2.metric('Subjects below 75%', int(pupil['subjects_below_75']))
+        p3.metric('Model risk band', str(pupil['risk']))
+        if st.button('Open detailed student profile  →', type='primary', key='open_full_profile'):
+            st.session_state.profile_student_id = selected_id
+            st.session_state.page = 'Profiles'
+            st.rerun()
+        detail = subject_records[subject_records['student_id'] == selected_id].copy()
+        detail['attendance_pct'] = detail['attendance_pct'].round(1)
+        st.dataframe(detail[['subject','classes_attended','classes_conducted','attendance_pct',
+                             'attendance_status','classes_needed_to_75','assignment','internal']],
+                     hide_index=True, use_container_width=True,
+                     column_config={'subject':'Subject','classes_attended':'Attended',
+                                    'classes_conducted':'Conducted','attendance_pct':'Attendance (%)',
+                                    'attendance_status':'Attendance rule',
+                                    'classes_needed_to_75':'Classes to reach 75%*',
+                                    'assignment':'Assignment (%)','internal':'Internal (%)'})
+        st.caption('*Minimum consecutive future classes the student would need to attend, assuming those classes are held. Mini Project is exempt (blank attendance).')
+
+
+
+def profile_view():
+    st.markdown('<div class="page-heading">Individual Student Profile</div><div class="page-description">MCA Semester 3 · Subject-wise attendance, simulated marks, and exploratory ML risk estimates.</div>', unsafe_allow_html=True)
+    with st.container(key='page_panel'):
+        identifiers = students['student_id'].astype(str).tolist()
+        names = dict(zip(students['student_id'].astype(str), students['name']))
+        if st.session_state.get('profile_student_id') not in identifiers:
+            st.session_state.profile_student_id = identifiers[0]
+        sid = st.selectbox(
+            'Choose a student', options=identifiers,
+            format_func=lambda selected: f'{names[selected]} ({selected})',
+            key='profile_student_id',
+        )
+        pupil = students.loc[students['student_id'].astype(str) == sid].iloc[0]
+        details = subject_profile_rows(subject_records, subject_catalog, sid, bundle)
+        examined = details.loc[details['attendance_required']]
+        attendance_shortages = int((examined['verified_attendance_status'] == 'Below 75%').sum())
+        high_subject_risks = int((examined['subject_risk'] == 'High').sum())
+
+        safe_name = escape(str(pupil['name']))
+        safe_id = escape(str(sid))
+        st.markdown(f'<div class="profile-banner"><strong>{safe_name}</strong><span>{safe_id} · MCA Semester 3 · 8 subjects · All attendance and marks are synthetic</span></div>', unsafe_allow_html=True)
+        a, b, c = st.columns(3)
+        a.metric('Overall attendance · 7 subjects', f"{int(pupil['attendance'])}%")
+        b.metric('Subjects below 75%', attendance_shortages)
+        c.metric('Subjects flagged High (ML demo)', high_subject_risks if bundle is not None else '—')
+
+        if attendance_shortages:
+            st.warning(f'Attendance eligibility: {attendance_shortages} subject(s) below 75%. This is separate from ML risk.')
+        else:
+            st.success('Attendance eligibility: minimum 75% met in all seven applicable subjects.')
+
+        st.markdown('<div class="profile-section-title">Subject-wise academic record</div>', unsafe_allow_html=True)
+        display_rows = []
+        for _, record in details.iterrows():
+            exempt = not bool(record['attendance_required'])
+            display_rows.append({
+                'Subject': record['subject'],
+                'Faculty': record['professor'],
+                'Attendance': 'Exempt' if exempt else f"{float(record['attendance_pct']):.1f}%",
+                'Eligibility': record['verified_attendance_status'],
+                'Classes to 75%': None if exempt else int(record['verified_classes_to_75']),
+                'Assignment': '—' if exempt else f"{int(record['assignment'])}%",
+                'Internal': '—' if exempt else f"{int(record['internal'])}%",
+                'ML demo risk': record['subject_risk'],
+                'Risk score': '—' if exempt or pd.isna(record['risk_score_pct']) else f"{float(record['risk_score_pct']):.1f}%",
+            })
+        st.dataframe(pd.DataFrame(display_rows), use_container_width=True, hide_index=True, height=345)
+        st.caption('Mini Project is exempt from attendance and excluded from subject exam-risk estimates. The 75% status is calculated from attended/conducted classes, independently of ML.')
+        st.info('**Research limitation:** The current model was trained on separate synthetic aggregate scores, not on real subject-level exam outcomes. Its subject-level results are exploratory model scores—not validated failure probabilities or official eligibility decisions.')
+
+        st.markdown('<div class="profile-section-title">Examine a subject</div>', unsafe_allow_html=True)
+        chosen_code = st.selectbox('Subject', options=details['subject_code'].tolist(),
+            format_func=lambda code: str(details.loc[details['subject_code'] == code, 'subject'].iloc[0]),
+            key='profile_subject_select')
+        subject = details.loc[details['subject_code'] == chosen_code].iloc[0]
+        st.write(f"**Professor:** {subject['professor']}  ·  **Credits:** {int(subject['credits'])}")
+        if not bool(subject['attendance_required']):
+            st.info('Mini Project is attendance-exempt; no attendance recovery or exam-risk estimate applies.')
+        else:
+            x, y, z = st.columns(3)
+            x.metric('Attendance', f"{float(subject['attendance_pct']):.1f}%")
+            y.metric('Assignment', f"{int(subject['assignment'])}%")
+            z.metric('Internal assessment', f"{int(subject['internal'])}%")
+            st.progress(min(100, max(0, int(round(float(subject['attendance_pct']))))), text='Attendance progress · minimum 75%')
+            if subject['verified_attendance_status'] == 'Below 75%':
+                st.warning(f"Attendance shortage: {int(subject['verified_classes_to_75'])} consecutive future attended class(es) needed to reach 75%, assuming each class is held and attended.")
+            else:
+                st.success('Attendance requirement met for this subject.')
+            if bundle is not None:
+                st.markdown(f"**Exploratory ML risk band:** {subject['subject_risk']} · **uncalibrated demo score:** {float(subject['risk_score_pct']):.1f}%")
+            else:
+                st.caption('Train the demonstration ML model to see subject-level scores; attendance eligibility works without it.')
+
+        st.markdown('**Suggested academic support**')
+        for note in academic_support(subject):
+            st.write('• ' + note)
+        st.caption('Suggestions are based on attendance and marks thresholds, not a causal explanation of the ML model. These are fictional academic records.')
+
+
+def subjects_view():
+    st.markdown('<div class="page-heading">Subjects & Attendance</div><div class="page-description">Seven subjects require 75% attendance. Mini Project is exempt. All attendance and marks are synthetic.</div>', unsafe_allow_html=True)
+    with st.container(key='page_panel'):
+        st.markdown('### MCA Semester 3 subjects')
+        st.dataframe(subject_catalog[['subject_code','subject','professor','credits','attendance_required']],
+                     hide_index=True, use_container_width=True,
+                     column_config={'subject_code':'Paper code','subject':'Subject',
+                                    'professor':'Faculty','credits':'Credits',
+                                    'attendance_required':'75% attendance required'})
+        selected_code = st.selectbox('Select a subject', options=subject_catalog['subject_code'].tolist(),
+            format_func=lambda code: str(subject_catalog.loc[subject_catalog['subject_code'] == code, 'subject'].iloc[0]),
+            key='subject_select')
+        meta = subject_catalog.loc[subject_catalog['subject_code'] == selected_code].iloc[0]
+        st.markdown(f"**Faculty:** {escape(str(meta['professor']))}  ·  **Credits:** {int(meta['credits'])}")
+        rows = subject_records[subject_records['subject_code'] == selected_code].copy()
+        if not bool(meta['attendance_required']):
+            st.info('Mini Project has no attendance requirement. All 34 students are marked Exempt; no 0% attendance is assigned.')
+        else:
+            eligible_count = int((rows['attendance_status'] == 'Meets 75%').sum())
+            c1, c2, c3 = st.columns(3)
+            c1.metric('Meets 75%', eligible_count)
+            c2.metric('Below 75%', len(rows) - eligible_count)
+            c3.metric('Avg. attendance', f"{rows['attendance_pct'].mean():.1f}%")
+        st.dataframe(rows[['student_id','name','classes_attended','classes_conducted',
+                           'attendance_pct','attendance_status','classes_needed_to_75','assignment','internal']],
+                     hide_index=True, use_container_width=True, height=400,
+                     column_config={'student_id':'SBU ID' if USE_LOCAL_ROSTER else 'Demo ID','name':'Student',
+                                    'classes_attended':'Attended','classes_conducted':'Conducted',
+                                    'attendance_pct':'Attendance (%)','attendance_status':'Eligibility',
+                                    'classes_needed_to_75':'Classes to 75%*',
+                                    'assignment':'Assignment (%)','internal':'Internal (%)'})
+        st.caption('*Future attendance recovery is illustrative. University decisions can involve additional policies.')
 
 
 def prediction_view():
@@ -302,8 +487,8 @@ def prediction_view():
                 fail_idx = list(bundle['model'].classes_).index(1)
                 point = pd.DataFrame([{'attendance':a, 'assignment':b, 'internal':c}])
                 p = float(bundle['model'].predict_proba(point)[:,fail_idx][0])
-                risk = label_from_probability(p)
-                message = f'{risk} risk · estimated failure probability {p:.0%} (synthetic-data demo)'
+                risk = label_from_probability(p, bundle.get('decision_threshold', 0.50))
+                message = f'{risk} risk · model risk score {p:.0%} (synthetic-data demo; not a calibrated probability)'
             else:
                 risk = rule_band({'attendance':a,'assignment':b,'internal':c})
                 message = f'{risk} risk · rule-based demonstration, not an ML prediction'
@@ -320,7 +505,7 @@ def prediction_view():
             if not tips: tips.append('Continue regular academic follow-up.')
             st.markdown('**Suggested academic support**')
             for tip in tips: st.write('• ' + tip)
-        st.info('This is a teaching prototype. A model trained on synthetic data is not validated for real educational decisions.')
+        st.info('This is an ML teaching demo. In the Subjects page, attendance eligibility is checked separately for each of the seven non-exempt subjects. A model risk score is not proof of exam ineligibility.')
 
 
 def analytics_view():
@@ -338,21 +523,25 @@ def analytics_view():
             c1.metric('Test accuracy', f"{m['accuracy']:.1%}")
             c2.metric('Failure recall', f"{m['fail_recall']:.1%}")
             c3.metric('Failure F1', f"{m['fail_f1']:.1%}")
+            st.caption(f"Decision threshold: {bundle.get('decision_threshold', 0.50):.0%}. The High-risk label matches the model's predicted Fail class; Medium means close to the threshold.")
             st.write('Confusion matrix (rows: actual, columns: predicted; Pass then Fail):')
             st.dataframe(pd.DataFrame(m['confusion_matrix'], index=['Actual Pass','Actual Fail'], columns=['Pred Pass','Pred Fail']))
-            st.warning('These metrics were measured on a synthetic holdout dataset. They do not establish real-world accuracy or fairness.')
+            st.warning('Model metrics are from the separate 280-record synthetic training dataset, not the 34 roster-linked MCA demo profiles. They do not establish real-world accuracy or fairness.')
 
 
 def reports_view():
     st.markdown('<div class="page-heading">Reports</div><div class="page-description">Export demo records and risk-screening results.</div>', unsafe_allow_html=True)
     with st.container(key='page_panel'):
         st.markdown('### Export student screening')
-        columns = ['student_id','name','attendance','assignment','internal','risk']
+        columns = ['student_id','name','attendance','assignment','internal','risk','subjects_below_75','attendance_eligibility']
         if bundle is not None: columns.append('fail_probability')
         out = students[columns].copy()
         st.download_button('Download CSV report', out.to_csv(index=False).encode('utf-8'), file_name='edupredict_demo_risk_report.csv', mime='text/csv', type='primary')
-        st.caption(f'{len(students)} synthetic records · {mode}; do not treat these as actual student outcomes.')
+        st.caption(f'{len(students)} class profiles · {mode}; all attendance and marks are simulated. Downloaded reports contain names and IDs; do not post them publicly.')
         st.dataframe(out.head(12), use_container_width=True, hide_index=True)
+        st.download_button('Download subject-wise attendance CSV',
+            subject_records.to_csv(index=False).encode('utf-8'),
+            file_name='edupredict_mca_subject_attendance_DEMO.csv', mime='text/csv')
 
 
 def settings_view():
@@ -361,8 +550,10 @@ def settings_view():
         st.markdown('### Smart student early-warning system')
         st.write('**Inputs:** attendance, assignment score and internal assessment score.')
         st.write(f'**Current prediction mode:** {mode}.')
-        st.write('**Purpose:** demonstrate how teachers might identify academic support needs before final examinations.')
-        st.write('**Privacy:** this starter contains synthetic student records only. Never upload identifiable student data to a public repository.')
+        st.write('**Class:** MCA Semester 3 · 34 student profiles · 8 subjects (7 attendance-required).')
+        st.write('**Attendance rule:** minimum 75% in each of seven attendance-required subjects; Mini Project exempt.')
+        st.write('**Purpose:** demonstrate subject attendance eligibility and ML-based academic support screening before final examinations.')
+        st.write('**Data:** ' + IDENTITY_NOTE + ' Email addresses are not used. Local student names and IDs must not be committed to a public repository.')
         st.write('**Next step:** develop and validate your model with appropriately permitted, real labelled data before real-world use.')
 
 with st.container(key='app_shell'):
@@ -394,7 +585,7 @@ with st.container(key='app_shell'):
                 with st.container(key='hero'):
                     hero_copy, hero_art = st.columns([0.69, 0.31], gap='small')
                     with hero_copy:
-                        st.markdown('<div class="eyebrow">YOUR CLASSROOM AT A GLANCE</div><h1 class="hero-title">Hello, Teacher!</h1><p class="hero-sub">Stay ahead of learning gaps. Spot students who may need extra support before their final examination.</p>', unsafe_allow_html=True)
+                        st.markdown('<div class="eyebrow">SBU · MCA SEMESTER 3 · SIMULATED ACADEMIC DATA</div><h1 class="hero-title">Hello, Teacher!</h1><p class="hero-sub">Monitor academic risk across 34 student profiles and review 75% attendance eligibility in seven subjects. Mini Project is exempt.</p>', unsafe_allow_html=True)
                         with st.container(key='hero_action'):
                             if st.button('Review student risk  →', key='review_action'):
                                 st.session_state.page = 'Students'
@@ -402,6 +593,8 @@ with st.container(key='app_shell'):
                     with hero_art:
                         st.markdown('<div class="hero-art">'+HERO_ART+'</div>',unsafe_allow_html=True)
                 st.markdown(metric_cards(),unsafe_allow_html=True)
+                attendance_shortage = int((students['subjects_below_75'] > 0).sum())
+                st.caption(f'Attendance eligibility: {attendance_shortage} of 34 student profiles are below 75% in at least one subject. This is separate from ML risk. Attendance and marks are synthetic; IDs and names follow the local roster when available.')
                 chart_l, chart_r = st.columns([0.4, 0.6], gap='small')
                 with chart_l: st.markdown(donut_chart(),unsafe_allow_html=True)
                 with chart_r: st.markdown(bar_chart(students.sort_values('attendance').iloc[np.linspace(0, len(students)-1, 7, dtype=int)]), unsafe_allow_html=True)
@@ -411,10 +604,13 @@ with st.container(key='app_shell'):
             elif active == 'Students':
                 filtered = students[students['name'].str.contains(query, case=False, na=False)] if query else students
                 student_view(filtered)
+            elif active == 'Profiles': profile_view()
+            elif active == 'Subjects': subjects_view()
             elif active == 'Predict': prediction_view()
             elif active == 'Analytics': analytics_view()
             elif active == 'Reports': reports_view()
             else: settings_view()
-            st.markdown(f'<div class="hint-strip">{mode} · Synthetic student data only. Screening is meant for academic assistance, not punitive decisions.</div>',unsafe_allow_html=True)
+            identity_label = "Local roster identities" if USE_LOCAL_ROSTER else "Fictional identities"
+            st.markdown(f'<div class="hint-strip">{mode} · {identity_label} · Synthetic marks/attendance · 8 subjects · 75% attendance check.</div>',unsafe_allow_html=True)
         with right_col:
             right_panel()
