@@ -51,7 +51,11 @@ def load_subject_records() -> pd.DataFrame:
 @st.cache_resource
 def load_model(model_mtime: float | None):
     if model_mtime is None:
-        return None
+        # Create the synthetic ML demonstration model
+        # when running on a fresh cloud deployment.
+        from train_model import main as train_demo_model
+        train_demo_model()
+
     return joblib.load(MODEL_PATH)
 
 
