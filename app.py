@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from student_profile import subject_profile_rows, academic_support
+from student_profile import subject_profile_rows, academic_support, academic_indicators, indicator_review_summary
 
 ROOT = Path(__file__).resolve().parent
 PRIVATE_DATA = ROOT / 'data' / 'private'
@@ -213,6 +213,15 @@ html, body, [data-testid="stAppViewContainer"], .stApp {background:#ded9d0!impor
 .profile-banner span{color:#898278;font-size:12px;display:block;margin-top:5px;}
 .profile-section-title{font-family:Georgia,serif;color:#987b37;font-size:19px;font-weight:700;padding:8px 0;}
 .profile-smallprint{color:#898278;font-size:12px;line-height:1.7;margin:6px 0 14px;}
+
+/* Academic signals: descriptive, NOT ML feature attribution */
+.indicator-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:5px 0;}
+.indicator-chip{display:inline-flex;align-items:center;gap:5px;background:#e8ecdf;color:#516243;border:1px solid #d3dcc6;border-radius:9px;padding:5px 8px;font-size:10px;font-weight:650;white-space:nowrap;}
+.indicator-chip.indicator-watch{background:#f6e4d9;color:#a05c41;border-color:#efd3c6;}
+.indicator-review{background:#f5f1e8;border:1px solid #e0d7c3;padding:12px 15px;border-radius:14px;margin:12px 0;}
+.indicator-review strong{font-family:Georgia,serif;font-size:15px;color:#947633;display:block;margin-bottom:8px;}
+.indicator-review .indicator-caption{font-size:11px;color:#82796b;line-height:1.55;margin-top:6px;}
+.student-table .indicator-chip{padding:4px 6px;font-size:9px;}
 </style>
 '''
 
@@ -246,6 +255,32 @@ low = int(risk_counts.get('Low', 0))
 now = datetime.now(ZoneInfo('Asia/Kolkata'))
 today = now.date()
 
+
+def indicator_chips(attendance, assignment, internal, *, subject_level=False) -> str:
+    signals = academic_indicators(attendance, assignment, internal, subject_level=subject_level)
+    chips = []
+    for signal in signals:
+        klass = ' indicator-watch' if signal['flag'] else ''
+        label = escape(str(signal['short']))
+        note = escape(str(signal['note']), quote=True)
+        chips.append(f'<span class="indicator-chip{klass}" title="{note}">{label}: {float(signal["value"]):.0f}%</span>')
+    return '<div class="indicator-row">' + ''.join(chips) + '</div>'
+
+
+def indicators_panel(attendance, assignment, internal, *, subject_level=False) -> str:
+    chips = indicator_chips(attendance, assignment, internal, subject_level=subject_level)
+    summary = escape(indicator_review_summary(
+        attendance, assignment, internal, subject_level=subject_level))
+    return (
+        '<div class="indicator-review"><strong>Academic indicators to review</strong>'
+        + chips + '<div class="indicator-caption">' + summary
+        + '. Coral marks are below demo review benchmarks. '
+        + 'The 60% marks benchmarks are not university passing marks. '
+        + 'These descriptive indicators are not causal explanations of the ML model.'
+        + '</div></div>'
+    )
+
+
 def student_table(frame: pd.DataFrame, limit: int = 6) -> str:
     lines = []
     for _, row in frame.head(limit).iterrows():
@@ -256,7 +291,7 @@ def student_table(frame: pd.DataFrame, limit: int = 6) -> str:
         lines.append(f'''<tr><td class="student-name">{name}<small>{rid}</small></td>
         <td>{att}% <span class="mini-track"><span class="mini-fill" style="width:{att}%"></span></span></td>
         <td>{int(row['assignment'])}%</td><td>{int(row['internal'])}%</td>
-        <td><span class="risk-chip risk-{risk}">{risk}</span></td><td>{'Shortage' if int(row['subjects_below_75']) else 'Meets 75%'}</td></tr>''')
+        <td><span class="risk-chip risk-{risk}">{risk}</span>{indicator_chips(row['attendance'], row['assignment'], row['internal'])}</td><td>{'Shortage' if int(row['subjects_below_75']) else 'Meets 75%'}</td></tr>''')
     return f'''<div class="data-card"><div class="table-heading"><strong>MCA Semester 3 student risk overview</strong><small>{len(frame)} records</small></div>
     <div style="overflow-x:auto"><table class="student-table"><thead><tr><th>STUDENT</th><th>ATTENDANCE</th><th>ASSIGNMENT</th><th>INTERNAL</th><th>RISK</th><th>ATTENDANCE RULE</th></tr></thead>
     <tbody>{''.join(lines) if lines else '<tr><td colspan="6">No matching students.</td></tr>'}</tbody></table></div></div>'''
@@ -323,12 +358,14 @@ def student_view(df: pd.DataFrame):
             st.markdown('### Class records')
         with right:
             selected = st.selectbox('Risk category', ['All','High','Medium','Low'], key='risk_filter')
-        filtered = df if selected == 'All' else df[df['risk'] == selected]
-        columns = ['student_id','name','attendance','assignment','internal','risk','subjects_below_75','attendance_eligibility']
+        filtered = (df if selected == 'All' else df[df['risk'] == selected]).copy()
+        filtered['review_indicators'] = filtered.apply(lambda r: indicator_review_summary(r['attendance'], r['assignment'], r['internal']), axis=1)
+        columns = ['student_id','name','attendance','assignment','internal','risk','review_indicators','subjects_below_75','attendance_eligibility']
         st.dataframe(filtered[columns], hide_index=True, use_container_width=True, height=320,
             column_config={'student_id':'SBU ID' if USE_LOCAL_ROSTER else 'Demo ID','name':'Student','attendance':'Overall attendance (%)',
                            'assignment':'Assignment mean (%)','internal':'Internal mean (%)',
-                           'risk':'ML risk','subjects_below_75':'Subjects below 75%',
+                           'risk':'ML risk','review_indicators':'Academic review flags',
+                           'subjects_below_75':'Subjects below 75%',
                            'attendance_eligibility':'Attendance status'})
         st.caption(f'{len(filtered)} class records · {mode}. Marks and attendance are simulated, not official. Overall attendance does NOT replace subject-specific checks.')
 
@@ -341,6 +378,7 @@ def student_view(df: pd.DataFrame):
         p1.metric('Overall attendance', f"{int(pupil['attendance'])}%")
         p2.metric('Subjects below 75%', int(pupil['subjects_below_75']))
         p3.metric('Model risk band', str(pupil['risk']))
+        st.markdown(indicators_panel(pupil['attendance'], pupil['assignment'], pupil['internal']), unsafe_allow_html=True)
         if st.button('Open detailed student profile  →', type='primary', key='open_full_profile'):
             st.session_state.profile_student_id = selected_id
             st.session_state.page = 'Profiles'
@@ -390,6 +428,8 @@ def profile_view():
         else:
             st.success('Attendance eligibility: minimum 75% met in all seven applicable subjects.')
 
+        st.markdown(indicators_panel(pupil['attendance'], pupil['assignment'], pupil['internal']), unsafe_allow_html=True)
+        st.caption('Overall attendance is descriptive; subject eligibility is checked separately.')
         st.markdown('<div class="profile-section-title">Subject-wise academic record</div>', unsafe_allow_html=True)
         display_rows = []
         for _, record in details.iterrows():
@@ -403,6 +443,7 @@ def profile_view():
                 'Assignment': '—' if exempt else f"{int(record['assignment'])}%",
                 'Internal': '—' if exempt else f"{int(record['internal'])}%",
                 'ML demo risk': record['subject_risk'],
+                'Review indicators': 'Exempt' if exempt else indicator_review_summary(record['attendance_pct'], record['assignment'], record['internal'], subject_level=True),
                 'Risk score': '—' if exempt or pd.isna(record['risk_score_pct']) else f"{float(record['risk_score_pct']):.1f}%",
             })
         st.dataframe(pd.DataFrame(display_rows), use_container_width=True, hide_index=True, height=345)
@@ -431,6 +472,7 @@ def profile_view():
                 st.markdown(f"**Exploratory ML risk band:** {subject['subject_risk']} · **uncalibrated demo score:** {float(subject['risk_score_pct']):.1f}%")
             else:
                 st.caption('Train the demonstration ML model to see subject-level scores; attendance eligibility works without it.')
+            st.markdown(indicators_panel(subject['attendance_pct'], subject['assignment'], subject['internal'], subject_level=True), unsafe_allow_html=True)
 
         st.markdown('**Suggested academic support**')
         for note in academic_support(subject):
@@ -498,6 +540,8 @@ def prediction_view():
                 st.warning(message)
             else:
                 st.success(message)
+            st.markdown(indicators_panel(a, b, c), unsafe_allow_html=True)
+            st.caption('ML output and descriptive academic review flags are separate; low marks do not automatically determine the ML label.')
             tips = []
             if a < 75: tips.append('Offer attendance support and check barriers to participation.')
             if b < 60: tips.append('Review assignment completion and offer targeted practice.')

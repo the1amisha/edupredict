@@ -68,3 +68,17 @@ The ML training data (`demo_students.csv`) has 280 **simulated** outcomes. The d
 ## Data privacy and GitHub
 
 Do not commit any real student directory, names, email addresses, roll numbers, or private attendance/marks. No data from an actual class directory is used in the synthetic files. `.gitignore` excludes `.venv`, model binaries, private local files, and common secrets.
+
+## Academic-indicator badges (teaching-only)
+
+The Overview, Students, Profiles, and Predict views show all three inputs
+beside an ML risk label: overall/subject attendance, assignment percentage,
+and internal assessment percentage. Coral chips flag subject attendance below
+75% or assignments/internals below **60%**, a *demonstration support benchmark*.
+Green chips indicate the benchmark is not triggered.
+
+The **75% requirement applies separately to each non-exempt subject**; an
+overall attendance average cannot determine eligibility. The 60% marks
+benchmarks are **not SBU passing thresholds**. The chips are descriptive
+rule-based checks, **not causal model explanations or feature importance**.
+All academic records are synthetic. Private class rosters remain local.

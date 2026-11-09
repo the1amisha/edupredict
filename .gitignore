@@ -13,3 +13,4 @@ models/*.pkl
 *.xlsx
 *.xls
 data/private/
+.indicator_backups/

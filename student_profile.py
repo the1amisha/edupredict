@@ -115,3 +115,43 @@ def academic_support(row) -> list[str]:
     if not notes:
         notes.append('Maintain consistent attendance and regular academic practice.')
     return notes
+
+# Descriptive early-warning benchmarks. These are not ML model explanations.
+ASSIGNMENT_REVIEW_BENCHMARK = 60.0
+INTERNAL_REVIEW_BENCHMARK = 60.0
+
+
+def academic_indicators(attendance: float, assignment: float, internal: float, *, subject_level: bool = False) -> list[dict[str, object]]:
+    """Return three non-causal academic review signals independent of ML risk."""
+    values = (float(attendance), float(assignment), float(internal))
+    if not all(math.isfinite(v) and 0 <= v <= 100 for v in values):
+        raise ValueError('Academic indicators must be between 0 and 100')
+    att, assn, intern = values
+    attendance_note = (
+        'Subject attendance below 75%; review exam eligibility'
+        if subject_level and att < MIN_ATTENDANCE else
+        'Subject attendance meets the 75% demo requirement'
+        if subject_level else
+        'Overall attendance below 75%; check individual subjects'
+        if att < MIN_ATTENDANCE else
+        'Overall average only; subject attendance is checked separately'
+    )
+    return [
+        {'short': 'Att', 'label': 'Attendance', 'value': att, 'flag': att < MIN_ATTENDANCE,
+         'note': attendance_note,
+         'alert': 'Subject attendance below 75%' if subject_level else 'Overall attendance below 75% (check subjects)'},
+        {'short': 'Assign', 'label': 'Assignments', 'value': assn,
+         'flag': assn < ASSIGNMENT_REVIEW_BENCHMARK,
+         'note': 'Below 60% demo support benchmark' if assn < 60 else 'At or above 60% demo support benchmark',
+         'alert': 'Assignments below 60% (demo benchmark)'},
+        {'short': 'Internal', 'label': 'Internal assessment', 'value': intern,
+         'flag': intern < INTERNAL_REVIEW_BENCHMARK,
+         'note': 'Below 60% demo support benchmark' if intern < 60 else 'At or above 60% demo support benchmark',
+         'alert': 'Internal below 60% (demo benchmark)'},
+    ]
+
+
+def indicator_review_summary(attendance: float, assignment: float, internal: float, *, subject_level: bool = False) -> str:
+    alerts = [item['alert'] for item in academic_indicators(
+        attendance, assignment, internal, subject_level=subject_level) if item['flag']]
+    return '; '.join(alerts) if alerts else 'No indicators below demo benchmarks'
