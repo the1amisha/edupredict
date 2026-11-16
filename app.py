@@ -226,21 +226,46 @@ html, body, [data-testid="stAppViewContainer"], .stApp {background:#ded9d0!impor
 .indicator-review strong{font-family:Georgia,serif;font-size:15px;color:#947633;display:block;margin-bottom:8px;}
 .indicator-review .indicator-caption{font-size:11px;color:#82796b;line-height:1.55;margin-top:6px;}
 .student-table .indicator-chip{padding:4px 6px;font-size:9px;}
+/* First-time visitor guidance */
+.guide-head{font-family:Georgia,serif;color:#8c7134;font-size:19px;font-weight:700;margin:4px 0 3px;}
+.guide-sub{font-size:12px;color:#847e72;line-height:1.5;margin-bottom:10px;}
+.st-key-step_find,.st-key-step_subject,.st-key-step_predict{
+ background:#faf8f3;border:1px solid #ded9ce;border-radius:16px;padding:13px 14px 11px!important;
+ min-height:145px;
+}
+.guide-number{background:#e8dcc1;color:#816527;border-radius:50%;width:27px;height:27px;
+ display:inline-grid;place-items:center;font-size:12px;font-weight:750;margin-bottom:8px;}
+.guide-title{font-family:Georgia,serif;font-weight:700;color:#685737;font-size:14px;margin-bottom:4px;}
+.guide-desc{font-size:11px;color:#888177;line-height:1.5;min-height:35px;}
+.st-key-step_find button,.st-key-step_subject button,.st-key-step_predict button{
+ width:100%;background:#a58a49!important;border-color:#a58a49!important;color:white!important;
+ border-radius:10px!important;font-size:11px!important;min-height:36px!important;
+}
+.guide-distinction{margin:12px 0 14px;border-left:3px solid #aa8f50;background:#f1eee5;
+ padding:10px 13px;border-radius:0 12px 12px 0;color:#736a58;font-size:12px;line-height:1.55;}
+.task-hint{border:1px solid #e2d9c4;border-radius:12px;background:#f4efe3;
+ padding:12px 15px;color:#77674c;font-size:12px;line-height:1.6;margin:8px 0 16px;}
+.task-hint strong{color:#83692e;}
+.topbar-context{font-size:13px;font-weight:650;color:#71623f;padding:10px 3px;}
+.topbar-context small{display:block;font-size:10px;font-weight:400;color:#928b7c;margin-top:2px;}
+@media(max-width:900px){.st-key-step_find,.st-key-step_subject,.st-key-step_predict{min-height:115px}}
 </style>
 '''
 
 st.markdown(CSS, unsafe_allow_html=True)
 
+# Human-readable labels. Internal page keys stay unchanged for compatibility.
 NAV = [
-    ('Overview', ':material/dashboard:'),
-    ('Students', ':material/groups:'),
-    ('Profiles', ':material/person:'),
-    ('Subjects', ':material/menu_book:'),
-    ('Predict', ':material/insights:'),
-    ('Analytics', ':material/bar_chart:'),
-    ('Reports', ':material/description:'),
-    ('Settings', ':material/settings:'),
+    ('Overview', 'Home · Start here', ':material/home:'),
+    ('Students', 'Find students', ':material/groups:'),
+    ('Profiles', 'Student profile', ':material/person:'),
+    ('Subjects', 'Attendance by subject', ':material/menu_book:'),
+    ('Predict', 'Try a prediction', ':material/insights:'),
+    ('Analytics', 'How the ML works', ':material/bar_chart:'),
+    ('Reports', 'Download reports', ':material/download:'),
+    ('Settings', 'Help & about', ':material/help:'),
 ]
+PAGE_LABELS = {key: label for key, label, _ in NAV}
 if 'page' not in st.session_state:
     st.session_state.page = 'Overview'
 active = st.session_state.page
@@ -291,14 +316,12 @@ def student_table(frame: pd.DataFrame, limit: int = 6) -> str:
         name = escape(str(row['name']))
         rid = escape(str(row['student_id']))
         risk = row['risk']
-        att = int(row['attendance'])
         lines.append(f'''<tr><td class="student-name">{name}<small>{rid}</small></td>
-        <td>{att}% <span class="mini-track"><span class="mini-fill" style="width:{att}%"></span></span></td>
-        <td>{int(row['assignment'])}%</td><td>{int(row['internal'])}%</td>
-        <td><span class="risk-chip risk-{risk}">{risk}</span>{indicator_chips(row['attendance'], row['assignment'], row['internal'])}</td><td>{'Shortage' if int(row['subjects_below_75']) else 'Meets 75%'}</td></tr>''')
+        <td><span class="risk-chip risk-{risk}">{risk}</span>{indicator_chips(row['attendance'], row['assignment'], row['internal'])}</td>
+        <td>{'Subject shortage' if int(row['subjects_below_75']) else 'All meet 75%'}</td></tr>''')
     return f'''<div class="data-card"><div class="table-heading"><strong>MCA Semester 3 student risk overview</strong><small>{len(frame)} records</small></div>
-    <div style="overflow-x:auto"><table class="student-table"><thead><tr><th>STUDENT</th><th>ATTENDANCE</th><th>ASSIGNMENT</th><th>INTERNAL</th><th>RISK</th><th>ATTENDANCE RULE</th></tr></thead>
-    <tbody>{''.join(lines) if lines else '<tr><td colspan="6">No matching students.</td></tr>'}</tbody></table></div></div>'''
+    <div style="overflow-x:auto"><table class="student-table"><thead><tr><th>STUDENT</th><th>ML DEMO RISK · ACADEMIC INDICATORS</th><th>ATTENDANCE RULE</th></tr></thead>
+    <tbody>{''.join(lines) if lines else '<tr><td colspan="3">No matching students.</td></tr>'}</tbody></table></div></div>'''
 
 
 def metric_cards() -> str:
@@ -354,8 +377,53 @@ def right_panel() -> None:
      <div class="alert-box"><div class="alert-circle">↘</div><div><strong>{missed} with subject attendance shortage</strong><small>75% required for seven subjects</small></div></div></div>''', unsafe_allow_html=True)
 
 
+def task_hint(title: str, instructions: str) -> None:
+    """A simple, safe one-sentence instruction for the current view."""
+    st.markdown(
+        '<div class="task-hint"><strong>' + escape(title) + '</strong> · '
+        + escape(instructions) + '</div>', unsafe_allow_html=True
+    )
+
+
+def guided_start() -> None:
+    """Three real buttons to lead a first-time visitor through the product."""
+    st.markdown('<div class="guide-head">Start here — three simple steps</div>'
+                '<div class="guide-sub">You can explore without entering any real student data.</div>',
+                unsafe_allow_html=True)
+    cards = [
+        ('step_find', '1', 'Find a student', 'Browse the class and choose someone to review.',
+         'Find students', 'Students'),
+        ('step_subject', '2', 'Check attendance', 'See the 75% rule separately for each subject.',
+         'Check subjects', 'Subjects'),
+        ('step_predict', '3', 'Try the ML demo', 'Move three sliders and view a model risk score.',
+         'Try prediction', 'Predict'),
+    ]
+    columns = st.columns(3, gap='small')
+    for column, (key, number, title, description, button_text, target) in zip(columns, cards):
+        with column:
+            with st.container(key=key):
+                st.markdown(
+                    f'<div class="guide-number">{number}</div>'
+                    f'<div class="guide-title">{escape(title)}</div>'
+                    f'<div class="guide-desc">{escape(description)}</div>',
+                    unsafe_allow_html=True,
+                )
+                if st.button(button_text, key='guide_to_' + target, use_container_width=True):
+                    st.session_state.page = target
+                    st.rerun()
+    st.markdown(
+        '<div class="guide-distinction"><strong>Two different checks:</strong> '
+        '<strong>Attendance eligibility</strong> uses 75% in each applicable subject. '
+        '<strong>ML risk</strong> is a demonstration score learned from fabricated outcomes, '
+        'not a certain prediction of exam failure. The 60% marks review benchmarks '
+        'are teaching examples, not passing marks.</div>',
+        unsafe_allow_html=True,
+    )
+
+
 def student_view(df: pd.DataFrame):
     st.markdown(f'<div class="page-heading">MCA Semester 3 · Students</div><div class="page-description">{escape(IDENTITY_NOTE)} Academic risk and attendance eligibility are separate indicators.</div>', unsafe_allow_html=True)
+    task_hint('Start with the class list', 'Search for a student, filter by risk, then open their detailed profile to review subjects.')
     with st.container(key='page_panel'):
         left, right = st.columns([2, 1])
         with left:
@@ -403,6 +471,7 @@ def student_view(df: pd.DataFrame):
 
 def profile_view():
     st.markdown('<div class="page-heading">Individual Student Profile</div><div class="page-description">MCA Semester 3 · Subject-wise attendance, simulated marks, and exploratory ML risk estimates.</div>', unsafe_allow_html=True)
+    task_hint('Choose a student above', 'Check their attendance by subject, then choose one subject for a closer look. Overall attendance does not override a subject shortage.')
     with st.container(key='page_panel'):
         identifiers = students['student_id'].astype(str).tolist()
         names = dict(zip(students['student_id'].astype(str), students['name']))
@@ -486,6 +555,7 @@ def profile_view():
 
 def subjects_view():
     st.markdown('<div class="page-heading">Subjects & Attendance</div><div class="page-description">Seven subjects require 75% attendance. Mini Project is exempt. All attendance and marks are synthetic.</div>', unsafe_allow_html=True)
+    task_hint('Pick one subject', 'See which demo students meet 75% attendance and how many future classes could resolve a shortage. Mini Project is exempt.')
     with st.container(key='page_panel'):
         st.markdown('### MCA Semester 3 subjects')
         st.dataframe(subject_catalog[['subject_code','subject','professor','credits','attendance_required']],
@@ -519,7 +589,8 @@ def subjects_view():
 
 
 def prediction_view():
-    st.markdown('<div class="page-heading">Individual Prediction</div><div class="page-description">Enter academic indicators to see an early-warning demonstration.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-heading">Try a Prediction</div><div class="page-description">Explore how the synthetic ML demo responds to attendance and assessment marks.</div>', unsafe_allow_html=True)
+    task_hint('Try your own example', 'Set attendance, assignment and internal scores with the sliders, then click Assess student. This does not determine exam eligibility.')
     with st.container(key='page_panel'):
         st.markdown('### Check student risk')
         st.caption('All three values are percentages from 0 to 100.')
@@ -557,7 +628,8 @@ def prediction_view():
 
 
 def analytics_view():
-    st.markdown('<div class="page-heading">Model Analytics</div><div class="page-description">Compare the demonstration screening and ML evaluation.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-heading">How the ML Model Works</div><div class="page-description">Understand test results on synthetic examples, not real exam predictions.</div>', unsafe_allow_html=True)
+    task_hint('Understand the ML result', 'Accuracy measures overall correct predictions; recall measures how many simulated failing students were flagged; F1 balances recall and precision.')
     with st.container(key='page_panel'):
         if bundle is None:
             st.markdown('### Model not trained yet')
@@ -573,12 +645,14 @@ def analytics_view():
             c3.metric('Failure F1', f"{m['fail_f1']:.1%}")
             st.caption(f"Decision threshold: {bundle.get('decision_threshold', 0.50):.0%}. The High-risk label matches the model's predicted Fail class; Medium means close to the threshold.")
             st.write('Confusion matrix (rows: actual, columns: predicted; Pass then Fail):')
+            st.caption('Read the matrix by row: actual Pass/Fail, and by column: model-predicted Pass/Fail. A missed failure appears in the Actual Fail / Pred Pass cell.')
             st.dataframe(pd.DataFrame(m['confusion_matrix'], index=['Actual Pass','Actual Fail'], columns=['Pred Pass','Pred Fail']))
             st.warning('Model metrics are from the separate 280-record synthetic training dataset, not the 34 roster-linked MCA demo profiles. They do not establish real-world accuracy or fairness.')
 
 
 def reports_view():
     st.markdown('<div class="page-heading">Reports</div><div class="page-description">Export demo records and risk-screening results.</div>', unsafe_allow_html=True)
+    task_hint('Download demonstration data', 'Export class risk or subject attendance records. Do not share locally exported reports containing classmates’ names or IDs.')
     with st.container(key='page_panel'):
         st.markdown('### Export student screening')
         columns = ['student_id','name','attendance','assignment','internal','risk','subjects_below_75','attendance_eligibility']
@@ -594,6 +668,7 @@ def reports_view():
 
 def settings_view():
     st.markdown('<div class="page-heading">About EduPredict</div><div class="page-description">Project information and usage guidance.</div>', unsafe_allow_html=True)
+    task_hint('How to use EduPredict', 'Begin at Home, open Find students for class profiles, choose Attendance by subject for the 75% rule, or use Try a prediction for the ML demo.')
     with st.container(key='page_panel'):
         st.markdown('### Smart student early-warning system')
         st.write('**Inputs:** attendance, assignment score and internal assessment score.')
@@ -609,25 +684,37 @@ with st.container(key='app_shell'):
     with sidebar_col:
         with st.container(key='sidebar'):
             st.markdown('<div class="brand-name">EduPredict<span style="color:#c9b26c">.</span></div><div class="brand-sub">SMART EDUCATION</div>', unsafe_allow_html=True)
-            st.markdown('<div class="nav-section">MENU</div>', unsafe_allow_html=True)
-            for page, icon in NAV:
-                if st.button(page, icon=icon, key=f'nav_{page}', use_container_width=True):
+            st.markdown('<div class="nav-section">GET STARTED</div>', unsafe_allow_html=True)
+            for page, label, icon in NAV:
+                if page == 'Profiles':
+                    st.markdown('<div class="nav-section">EXPLORE</div>', unsafe_allow_html=True)
+                if page == 'Analytics':
+                    st.markdown('<div class="nav-section">LEARN & EXPORT</div>', unsafe_allow_html=True)
+                if st.button(label, icon=icon, key=f'nav_{page}', use_container_width=True):
                     st.session_state.page = page
                     st.rerun()
             st.markdown('<div class="sidebar-bottom"><strong>● DEMO ENVIRONMENT</strong><div>Academic risk insights<br>for learning and research.</div></div>',unsafe_allow_html=True)
     with workspace_col:
         with st.container(key='topbar'):
-            search_col, mail_col, notification_col, teacher_col = st.columns([0.58, 0.10, 0.10, 0.22], gap='small')
+            search_col, teacher_col = st.columns([0.76, 0.24], gap='small')
             with search_col:
-                query = st.text_input('Search students', placeholder='⌕  Search students...', label_visibility='collapsed', key='top_search')
-            with mail_col:
-                st.markdown('<div class="topbar-icon" title="Messages">✉</div>', unsafe_allow_html=True)
-            with notification_col:
-                st.markdown(f'<div class="topbar-icon" title="High-risk alerts">♧ <sup style="color:#ab624e;font-size:9px">{high}</sup></div>',unsafe_allow_html=True)
+                if active in ('Overview', 'Students'):
+                    query = st.text_input('Search students', placeholder='⌕  Search students...', label_visibility='collapsed', key='top_search')
+                else:
+                    query = ''
+                    st.markdown(f'<div class="topbar-context">{escape(PAGE_LABELS.get(active, active))}<small>Use the left menu to change sections · Synthetic demo</small></div>', unsafe_allow_html=True)
             with teacher_col:
                 st.markdown('<div class="teacher-pill"><span class="teacher-avatar">👩🏻‍🏫</span><div><strong>Class Teacher</strong><small>Educator dashboard</small></div></div>',unsafe_allow_html=True)
+        if active != 'Overview':
+            if st.button('← Back to Home', key='back_to_home'):
+                st.session_state.page = 'Overview'
+                st.rerun()
         st.markdown('<div style="height:11px"></div>',unsafe_allow_html=True)
-        main_col, right_col = st.columns([0.755, 0.245], gap='small')
+        if active == 'Overview':
+            main_col, right_col = st.columns([0.755, 0.245], gap='small')
+        else:
+            main_col = st.container()  # More room for subject and student tables.
+            right_col = None
         with main_col:
             if active == 'Overview':
                 with st.container(key='hero'):
@@ -640,6 +727,7 @@ with st.container(key='app_shell'):
                                 st.rerun()
                     with hero_art:
                         st.markdown('<div class="hero-art">'+HERO_ART+'</div>',unsafe_allow_html=True)
+                guided_start()
                 st.markdown(metric_cards(),unsafe_allow_html=True)
                 attendance_shortage = int((students['subjects_below_75'] > 0).sum())
                 st.caption(f'Attendance eligibility: {attendance_shortage} of 34 student profiles are below 75% in at least one subject. This is separate from ML risk. Attendance and marks are synthetic; IDs and names follow the local roster when available.')
@@ -660,5 +748,6 @@ with st.container(key='app_shell'):
             else: settings_view()
             identity_label = "Local roster identities" if USE_LOCAL_ROSTER else "Fictional identities"
             st.markdown(f'<div class="hint-strip">{mode} · {identity_label} · Synthetic marks/attendance · 8 subjects · 75% attendance check.</div>',unsafe_allow_html=True)
-        with right_col:
-            right_panel()
+        if right_col is not None:
+            with right_col:
+                right_panel()
