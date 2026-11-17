@@ -1,35 +1,35 @@
 student_id,name,attendance,assignment,internal,attendance_eligibility,subjects_below_75
-DEMO-MCA-001,Aditi Mehra,80,68,72,Below 75% in subject(s),3
-DEMO-MCA-002,Arjun Bhat,79,83,88,Below 75% in subject(s),2
-DEMO-MCA-003,Ishita Sen,83,53,54,Meets attendance rule,0
-DEMO-MCA-004,Raghav Jain,88,58,50,Below 75% in subject(s),1
-DEMO-MCA-005,Anaya Kapoor,93,82,77,Meets attendance rule,0
-DEMO-MCA-006,Kunal Roy,92,68,72,Meets attendance rule,0
-DEMO-MCA-007,Meera Das,85,76,70,Meets attendance rule,0
-DEMO-MCA-008,Vivaan Khanna,87,71,67,Below 75% in subject(s),1
-DEMO-MCA-009,Nisha Gupta,100,82,91,Meets attendance rule,0
-DEMO-MCA-010,Kabir Malhotra,70,46,35,Below 75% in subject(s),4
-DEMO-MCA-011,Sneha Saxena,77,71,66,Below 75% in subject(s),4
-DEMO-MCA-012,Riya Bose,86,74,64,Meets attendance rule,0
-DEMO-MCA-013,Dev Sinha,98,93,90,Meets attendance rule,0
-DEMO-MCA-014,Diya Nair,81,44,38,Below 75% in subject(s),1
-DEMO-MCA-015,Aditya Mishra,90,87,95,Meets attendance rule,0
-DEMO-MCA-016,Sanvi Rao,89,81,76,Below 75% in subject(s),1
-DEMO-MCA-017,Aman Pandey,88,71,64,Meets attendance rule,0
-DEMO-MCA-018,Nandini Ghosh,92,63,61,Meets attendance rule,0
-DEMO-MCA-019,Yash Anand,90,51,47,Meets attendance rule,0
-DEMO-MCA-020,Kirti Sahu,85,49,42,Below 75% in subject(s),1
-DEMO-MCA-021,Pooja Prasad,96,86,88,Meets attendance rule,0
-DEMO-MCA-022,Rohan Verma,77,73,67,Below 75% in subject(s),3
-DEMO-MCA-023,Avni Joshi,75,59,61,Below 75% in subject(s),3
-DEMO-MCA-024,Tanya Singh,85,80,83,Below 75% in subject(s),1
-DEMO-MCA-025,Neha Shah,90,79,80,Meets attendance rule,0
-DEMO-MCA-026,Siddharth Kumar,100,78,71,Meets attendance rule,0
-DEMO-MCA-027,Simran Dutta,82,76,73,Below 75% in subject(s),1
-DEMO-MCA-028,Varun Patel,97,72,67,Meets attendance rule,0
-DEMO-MCA-029,Priya Banerjee,88,60,56,Below 75% in subject(s),1
-DEMO-MCA-030,Aryan Sethi,88,77,58,Meets attendance rule,0
-DEMO-MCA-031,Ayesha Ali,70,67,69,Below 75% in subject(s),6
-DEMO-MCA-032,Manav Saxena,88,66,54,Below 75% in subject(s),1
-DEMO-MCA-033,Ritu Das,78,69,61,Below 75% in subject(s),3
-DEMO-MCA-034,Harsh Sharma,97,72,70,Meets attendance rule,0
+SBU2500819,Amisha,80,68,72,Below 75% in subject(s),3
+SBU2501078,Kumari Avani Tejasvini,79,83,88,Below 75% in subject(s),2
+SBU2500351,Aishwarya,83,53,54,Meets attendance rule,0
+SBU2501904,Smriti Kumari,88,58,50,Below 75% in subject(s),1
+SBU2584107,Abhishek Kumar,93,82,77,Meets attendance rule,0
+SBU2551454,Anurag Kumar,92,68,72,Meets attendance rule,0
+SBU2546437,Shivendra Mahto,85,76,70,Meets attendance rule,0
+SBU2531820,Shivam Kumar,87,71,67,Below 75% in subject(s),1
+SBU2599034,Mahima Bage,100,82,91,Meets attendance rule,0
+SBU2549526,Priya Kumari,70,46,35,Below 75% in subject(s),4
+SBU2517552,Aman Tigga,77,71,66,Below 75% in subject(s),4
+SBU2515866,Satish Kumar,86,74,64,Meets attendance rule,0
+SBU2548776,Aman Raj,98,93,90,Meets attendance rule,0
+SBU2549508,Nikhil Kumhar,81,44,38,Below 75% in subject(s),1
+SBU2554080,Aditya Kumar Pandey,90,87,95,Meets attendance rule,0
+SBU2539767,Kumar Kinshu,89,81,76,Below 75% in subject(s),1
+SBU2519869,Binod Kumar,88,71,64,Meets attendance rule,0
+SBU2564057,Suraj Kumar Rana,92,63,61,Meets attendance rule,0
+SBU2512737,Lakshmi Tiwari,90,51,47,Meets attendance rule,0
+SBU2546136,Alpha Toppo,85,49,42,Below 75% in subject(s),1
+SBU2531442,Harsh Ekka,96,86,88,Meets attendance rule,0
+SBU2583143,Priyanka Pramanik,77,73,67,Below 75% in subject(s),3
+SBU2567765,Laxmi Kumari Rajak,75,59,61,Below 75% in subject(s),3
+SBU2599516,Ayush Kumar,85,80,83,Below 75% in subject(s),1
+SBU2510912,Keshav Aryan,90,79,80,Meets attendance rule,0
+SBU2563519,Rajan Kumar,100,78,71,Meets attendance rule,0
+SBU2591563,Kajal Kumari,82,76,73,Below 75% in subject(s),1
+SBU2597294,Umang Mathur,97,72,67,Meets attendance rule,0
+SBU2514112,Aditi Sahay,88,60,56,Below 75% in subject(s),1
+SBU2599030,Sonu Kumar,88,77,58,Meets attendance rule,0
+SBU2584304,Saurabh Pandey,70,67,69,Below 75% in subject(s),6
+SBU2575236,Somnath Bedia,88,66,54,Below 75% in subject(s),1
+SBU2551829,Prerna Bharti,78,69,61,Below 75% in subject(s),3
+SBU2539123,Krishna Mahto,97,72,70,Meets attendance rule,0
