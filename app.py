@@ -101,20 +101,6 @@ def icon_svg(kind: str, size: int = 34) -> str:
     }
     return f'<svg width="{size}" height="{size}" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{paths[kind]}</svg>'
 
-HERO_ART = '''<svg viewBox="0 0 280 164" width="100%" height="150" aria-hidden="true">
-<ellipse cx="145" cy="146" rx="127" ry="12" fill="#e6decc"/>
-<rect x="17" y="94" width="242" height="8" rx="4" fill="#9a824c"/>
-<rect x="37" y="102" width="7" height="42" rx="2" fill="#786a50"/><rect x="230" y="102" width="7" height="42" rx="2" fill="#786a50"/>
-<rect x="69" y="77" width="75" height="49" rx="5" fill="#575750"/><rect x="75" y="83" width="63" height="36" rx="2" fill="#d6c89f"/><path d="M60 126h93" stroke="#575750" stroke-width="5" stroke-linecap="round"/>
-<rect x="198" y="72" width="39" height="24" rx="5" fill="#d1b46f"/><path d="M207 72V58h20v14" fill="none" stroke="#685d3f" stroke-width="4"/>
-<circle cx="183" cy="44" r="18" fill="#d7a579"/><path d="M165 39c-7-20 20-30 32-12 3 6 3 15-1 21l-4-11-12-6-15 8Z" fill="#454640"/>
-<path d="M159 81c3-20 13-27 25-27s25 9 30 27v17h-59Z" fill="#b18d3d"/>
-<path d="M168 68c-16 8-22 19-26 29M197 70l-7 23-35 4" stroke="#d7a579" stroke-width="10" stroke-linecap="round"/>
-<path d="M172 96h38v40h-50v-14" fill="#6c705d"/><path d="M209 132h11v14M173 132l-7 14" stroke="#565950" stroke-width="7" stroke-linecap="round"/>
-<rect x="21" y="77" width="30" height="17" rx="2" fill="#e3cc84"/><rect x="26" y="68" width="25" height="9" rx="2" fill="#b79551"/><rect x="31" y="60" width="20" height="8" rx="2" fill="#737b63"/>
-<path d="M248 37l6-10 6 10M251 49h14" stroke="#b99f62" stroke-width="3" stroke-linecap="round"/>
-</svg>'''
-
 CSS = r'''
 <style>
 :root {--ink:#3f403d;--gold:#9b7c31;--gold2:#c2a65e;--cream:#f7f5f0;--warm:#ece9e2;--line:#dcd7cb;--muted:#8d8b86;}
@@ -249,10 +235,181 @@ html, body, [data-testid="stAppViewContainer"], .stApp {background:#ded9d0!impor
 .topbar-context{font-size:13px;font-weight:650;color:#71623f;padding:10px 3px;}
 .topbar-context small{display:block;font-size:10px;font-weight:400;color:#928b7c;margin-top:2px;}
 @media(max-width:900px){.st-key-step_find,.st-key-step_subject,.st-key-step_predict{min-height:115px}}
+
+/* EDUPREDICT-UI-POLISH-2026-11 */
+/* Let the application occupy the entire available page, rather than a floating card. */
+html, body, .stApp, [data-testid="stAppViewContainer"] {
+    background: #f4f2ed !important;
+}
+.block-container, [data-testid="stAppViewBlockContainer"] {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.st-key-app_shell {
+    width: 100% !important;
+    min-height: 100dvh !important;
+    padding: 8px 12px 18px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #f4f2ed !important;
+}
+/* A charcoal navigation panel that continues to the bottom of the viewport.
+   Keep it visible during scrolling; its own contents remain scrollable on small screens. */
+.st-key-sidebar {
+    position: sticky !important;
+    top: 0 !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    max-height: 100dvh !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    border-radius: 14px !important;
+    padding: 20px 13px 16px !important;
+}
+.st-key-sidebar::-webkit-scrollbar { width: 5px; }
+.st-key-sidebar::-webkit-scrollbar-thumb {
+    background: #7b7b72;
+    border-radius: 10px;
+}
+.sidebar-bottom {
+    margin-top: 14px !important;
+    padding: 14px 8px 6px !important;
+    border-top: 1px solid #6b6b64;
+}
+/* A compact academic-performance illustration, rather than a distorted character. */
+.st-key-hero {
+    padding: 17px 21px 13px !important;
+    min-height: 178px !important;
+}
+.st-key-hero [data-testid="stImage"] {
+    width: 100% !important;
+    max-width: 238px !important;
+    margin: 0 0 0 auto !important;
+}
+.st-key-hero [data-testid="stImage"] img {
+    width: 100% !important;
+    height: 174px !important;
+    object-fit: contain !important;
+}
+.hero-fallback {
+    min-height: 140px;
+    display: grid;
+    place-items: center;
+    color: #8f793b;
+    font-family: Georgia, serif;
+    font-size: 17px;
+}
+@media (max-width: 900px) {
+    .st-key-app_shell {padding: 5px 6px 12px !important;}
+    .st-key-sidebar {padding: 12px 8px !important;}
+    .st-key-hero [data-testid="stImage"] img {height: 115px !important;}
+    .st-key-hero [data-testid="stImage"] {max-width: 155px !important;}
+}
+
+
+/* EDUPREDICT-SIDEBAR-RAIL-2026-11-V2 */
+/* IMPORTANT: The sticky element must be the sidebar COLUMN, not an inner
+   container. Otherwise the inner container sticks only within its short
+   wrapper, leaving the empty strip shown while scrolling down. */
+@media (min-width: 901px) {
+  div[data-testid="stColumn"]:has(.st-key-sidebar) {
+    position: sticky !important;
+    position: -webkit-sticky !important;
+    top: 0 !important;
+    align-self: flex-start !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    max-height: 100dvh !important;
+    overflow: visible !important;
+    z-index: 40 !important;
+  }
+  .st-key-sidebar {
+    /* The column now owns sticky positioning. */
+    position: relative !important;
+    top: auto !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    max-height: 100dvh !important;
+    box-sizing: border-box !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    border-radius: 0 14px 14px 0 !important;
+    margin: 0 !important;
+  }
+  /* Keep the footer at the bottom, instead of stopping after the last link.
+     Use a normal flow footer on shorter screens so nothing overlaps. */
+  .st-key-sidebar .sidebar-bottom {
+    position: absolute !important;
+    bottom: 18px !important;
+    left: 12px !important;
+    right: 12px !important;
+    margin: 0 !important;
+    padding: 11px 7px 0 !important;
+    border-top: 1px solid #77776f !important;
+  }
+}
+@media (min-width: 901px) and (max-height: 800px) {
+  .st-key-sidebar .sidebar-bottom {
+    position: static !important;
+    margin-top: 18px !important;
+    padding-top: 13px !important;
+  }
+}
+@media (max-width: 900px) {
+  /* Small screens: scrolling as normal is less intrusive than a tall sticky rail. */
+  div[data-testid="stColumn"]:has(.st-key-sidebar) {
+    position: relative !important;
+    top: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .st-key-sidebar {
+    position: relative !important;
+    top: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .st-key-sidebar .sidebar-bottom {
+    position: static !important;
+    margin-top: 18px !important;
+  }
+}
+
+
+/* EDUPREDICT-CLEAN-UI-2026-11-V1 */
+/* Flush the dashboard to the top of the app viewport. The CSS-only st.html()
+   calls do not create blank Streamlit layout blocks above the shell. */
+[data-testid="stMainBlockContainer"],
+[data-testid="stAppViewBlockContainer"],
+.block-container {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+.st-key-app_shell {padding-top: 0 !important;}
+/* No fake calendar: these styles belong to counts derived from student records. */
+.review-stat{display:flex;justify-content:space-between;gap:12px;align-items:center;
+  margin:0 13px;padding:11px 3px;border-bottom:1px solid #ebe6db;}
+.review-stat:last-child{border-bottom:0;}
+.review-stat strong{display:block;font-size:12px;color:#5a554b;}
+.review-stat small{display:block;font-size:10px;color:#918a7f;line-height:1.45;margin-top:3px;}
+.review-stat .review-num{font-family:Georgia,serif;font-size:20px;font-weight:700;color:#927430;
+  background:#f1e8d2;border-radius:11px;padding:8px;min-width:40px;text-align:center;}
+.summary-note{font-size:11px;color:#776d5a;line-height:1.5;
+  margin:9px 14px 3px;padding:10px 11px;background:#f2eee5;border-radius:10px;}
+@media (max-width:900px){.st-key-app_shell{padding-top:0!important;}}
 </style>
 '''
 
-st.markdown(CSS, unsafe_allow_html=True)
+st.html(CSS)
 
 # Human-readable labels. Internal page keys stay unchanged for compatibility.
 NAV = [
@@ -269,7 +426,7 @@ PAGE_LABELS = {key: label for key, label, _ in NAV}
 if 'page' not in st.session_state:
     st.session_state.page = 'Overview'
 active = st.session_state.page
-st.markdown(f'<style>.st-key-nav_{active} button{{background:linear-gradient(105deg,#90722f,#b39751)!important;color:white!important;font-weight:650!important;}}</style>', unsafe_allow_html=True)
+st.html(f'<style>.st-key-nav_{active} button{{background:linear-gradient(105deg,#90722f,#b39751)!important;color:white!important;font-weight:650!important;}}</style>')
 
 raw = load_students()
 subject_catalog = load_subjects()
@@ -303,7 +460,7 @@ def indicators_panel(attendance, assignment, internal, *, subject_level=False) -
     return (
         '<div class="indicator-review"><strong>Academic indicators to review</strong>'
         + chips + '<div class="indicator-caption">' + summary
-        + '. Coral marks are below demo review benchmarks. '
+        + '. Highlighted values suggest areas for review. '
         + 'The 60% marks benchmarks are not university passing marks. '
         + 'These descriptive indicators are not causal explanations of the ML model.'
         + '</div></div>'
@@ -320,7 +477,7 @@ def student_table(frame: pd.DataFrame, limit: int = 6) -> str:
         <td><span class="risk-chip risk-{risk}">{risk}</span>{indicator_chips(row['attendance'], row['assignment'], row['internal'])}</td>
         <td>{'Subject shortage' if int(row['subjects_below_75']) else 'All meet 75%'}</td></tr>''')
     return f'''<div class="data-card"><div class="table-heading"><strong>MCA Semester 3 student risk overview</strong><small>{len(frame)} records</small></div>
-    <div style="overflow-x:auto"><table class="student-table"><thead><tr><th>STUDENT</th><th>ML DEMO RISK · ACADEMIC INDICATORS</th><th>ATTENDANCE RULE</th></tr></thead>
+    <div style="overflow-x:auto"><table class="student-table"><thead><tr><th>STUDENT</th><th>ML RISK · ACADEMIC INDICATORS</th><th>ATTENDANCE RULE</th></tr></thead>
     <tbody>{''.join(lines) if lines else '<tr><td colspan="3">No matching students.</td></tr>'}</tbody></table></div></div>'''
 
 
@@ -354,28 +511,27 @@ def bar_chart(frame: pd.DataFrame) -> str:
 
 
 def right_panel() -> None:
-    cal = calendar.Calendar(firstweekday=6)
-    weeks = cal.monthdayscalendar(today.year, today.month)
-    milestones = [today + timedelta(days=d) for d in (3, 6, 9)]
-    events = {d.day for d in milestones if (d.month, d.year) == (today.month, today.year)}
-    header = ''.join(f'<div class="calendar-weekday">{d}</div>' for d in ['Su','Mo','Tu','We','Th','Fr','Sa'])
-    days = ''
-    for week in weeks:
-        for day in week:
-            classes = ' muted' if day == 0 else ' today' if day == today.day else ' event' if day in events else ''
-            days += f'<div class="calendar-day{classes}">{day if day else ""}</div>'
-    st.markdown(f'''<div class="side-card"><div class="side-title">Academic Calendar</div>
-    <div class="side-meta">Sample schedule</div><div class="calendar-head"><span>{today.strftime('%B %Y')}</span><span style="font-weight:400;color:#9a927c">Demo</span></div>
-    <div class="calendar-grid">{header}{days}</div></div>''', unsafe_allow_html=True)
-    events_html = ''
-    for date, title, sub in zip(milestones,['Attendance review','Assignment check','Practice assessment'],['Check missing classes','Review submissions','Sample class exercise']):
-        events_html += f'<div class="side-event"><div class="date-box">{date.strftime("%d")}<br>{date.strftime("%b").upper()}</div><div><strong>{title}</strong><small>{sub}</small></div></div>'
-    st.markdown(f'<div class="side-card"><div class="side-title">Upcoming Reviews</div><div class="side-list">{events_html}</div></div>',unsafe_allow_html=True)
-    missed = int((students['subjects_below_75'] > 0).sum())
-    st.markdown(f'''<div class="side-card"><div class="side-title">Student Alerts</div>
-     <div class="alert-box"><div class="alert-circle">!</div><div><strong>{high} high-risk students</strong><small>Prioritise academic support</small></div></div>
-     <div class="alert-box"><div class="alert-circle">↘</div><div><strong>{missed} with subject attendance shortage</strong><small>75% required for seven subjects</small></div></div></div>''', unsafe_allow_html=True)
+    """Show class-derived information, not invented calendar appointments."""
+    attendance_shortage = int((students['subjects_below_75'] > 0).sum())
+    marks_review = int(((students['assignment'] < 60) | (students['internal'] < 60)).sum())
+    attendance_subjects = int(subject_catalog['attendance_required'].sum())
 
+    st.markdown(f'''<div class="side-card"><div class="side-title">Class Overview</div>
+    <div class="review-stat"><div><strong>Students</strong><small>Student profiles in the class</small></div><span class="review-num">{len(students)}</span></div>
+    <div class="review-stat"><div><strong>Subjects</strong><small>{attendance_subjects} with attendance requirements</small></div><span class="review-num">{len(subject_catalog)}</span></div>
+    <div class="summary-note">75% attendance is required in each applicable subject. Mini Project is exempt.</div>
+    </div>''', unsafe_allow_html=True)
+
+    st.markdown(f'''<div class="side-card"><div class="side-title">Needs Attention</div>
+    <div class="review-stat"><div><strong>Attendance shortages</strong><small>Below 75% in at least one subject</small></div><span class="review-num">{attendance_shortage}</span></div>
+    <div class="review-stat"><div><strong>High ML risk</strong><small>Academic follow-up suggested</small></div><span class="review-num">{high}</span></div>
+    <div class="review-stat"><div><strong>Marks to review</strong><small>Assignment or internal average below 60%</small></div><span class="review-num">{marks_review}</span></div>
+    </div>''', unsafe_allow_html=True)
+
+    st.markdown('''<div class="side-card"><div class="side-title">Understanding the Results</div>
+    <div class="summary-note"><strong>Attendance eligibility</strong> uses the subject-wise 75% rule.<br>
+    <strong>ML risk</strong> is a separate early-warning estimate. They are not the same result.</div>
+    </div>''', unsafe_allow_html=True)
 
 def task_hint(title: str, instructions: str) -> None:
     """A simple, safe one-sentence instruction for the current view."""
@@ -415,8 +571,8 @@ def guided_start() -> None:
         '<div class="guide-distinction"><strong>Two different checks:</strong> '
         '<strong>Attendance eligibility</strong> uses 75% in each applicable subject. '
         '<strong>ML risk</strong> is a demonstration score learned from fabricated outcomes, '
-        'not a certain prediction of exam failure. The 60% marks review benchmarks '
-        'are teaching examples, not passing marks.</div>',
+        'not a certain prediction of exam failure. Scores below 60% suggest further academic review, '
+        'but 60% is not an official passing mark.</div>',
         unsafe_allow_html=True,
     )
 
@@ -693,7 +849,6 @@ with st.container(key='app_shell'):
                 if st.button(label, icon=icon, key=f'nav_{page}', use_container_width=True):
                     st.session_state.page = page
                     st.rerun()
-            st.markdown('<div class="sidebar-bottom"><strong>● DEMO ENVIRONMENT</strong><div>Academic risk insights<br>for learning and research.</div></div>',unsafe_allow_html=True)
     with workspace_col:
         with st.container(key='topbar'):
             search_col, teacher_col = st.columns([0.76, 0.24], gap='small')
@@ -726,7 +881,11 @@ with st.container(key='app_shell'):
                                 st.session_state.page = 'Students'
                                 st.rerun()
                     with hero_art:
-                        st.markdown('<div class="hero-art">'+HERO_ART+'</div>',unsafe_allow_html=True)
+                        hero_path = ROOT / 'assets' / 'hero_academic.png'
+                        if hero_path.exists():
+                            st.image(str(hero_path), use_container_width=True)
+                        else:
+                            st.markdown('<div class="hero-fallback">Progress · Insights · Support</div>', unsafe_allow_html=True)
                 guided_start()
                 st.markdown(metric_cards(),unsafe_allow_html=True)
                 attendance_shortage = int((students['subjects_below_75'] > 0).sum())

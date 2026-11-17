@@ -130,7 +130,7 @@ def academic_indicators(attendance: float, assignment: float, internal: float, *
     attendance_note = (
         'Subject attendance below 75%; review exam eligibility'
         if subject_level and att < MIN_ATTENDANCE else
-        'Subject attendance meets the 75% demo requirement'
+        'Subject attendance meets 75%'
         if subject_level else
         'Overall attendance below 75%; check individual subjects'
         if att < MIN_ATTENDANCE else
@@ -142,16 +142,16 @@ def academic_indicators(attendance: float, assignment: float, internal: float, *
          'alert': 'Subject attendance below 75%' if subject_level else 'Overall attendance below 75% (check subjects)'},
         {'short': 'Assign', 'label': 'Assignments', 'value': assn,
          'flag': assn < ASSIGNMENT_REVIEW_BENCHMARK,
-         'note': 'Below 60% demo support benchmark' if assn < 60 else 'At or above 60% demo support benchmark',
-         'alert': 'Assignments below 60% (demo benchmark)'},
+         'note': 'Below 60% review threshold' if assn < 60 else 'At or above 60% review threshold',
+         'alert': 'Assignments below 60%'},
         {'short': 'Internal', 'label': 'Internal assessment', 'value': intern,
          'flag': intern < INTERNAL_REVIEW_BENCHMARK,
-         'note': 'Below 60% demo support benchmark' if intern < 60 else 'At or above 60% demo support benchmark',
-         'alert': 'Internal below 60% (demo benchmark)'},
+         'note': 'Below 60% review threshold' if intern < 60 else 'At or above 60% review threshold',
+         'alert': 'Internal below 60%'},
     ]
 
 
 def indicator_review_summary(attendance: float, assignment: float, internal: float, *, subject_level: bool = False) -> str:
     alerts = [item['alert'] for item in academic_indicators(
         attendance, assignment, internal, subject_level=subject_level) if item['flag']]
-    return '; '.join(alerts) if alerts else 'No indicators below demo benchmarks'
+    return '; '.join(alerts) if alerts else 'No academic indicators need attention'
