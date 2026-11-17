@@ -15,6 +15,7 @@ import joblib
 import numpy as np
 import pandas as pd
 import streamlit as st
+from faculty_auth import require_faculty_login, logout_faculty
 
 from student_profile import subject_profile_rows, academic_support, academic_indicators, indicator_review_summary
 
@@ -30,6 +31,9 @@ MODEL_PATH = ROOT / 'models' / 'risk_model.joblib'
 FEATURES = ['attendance', 'assignment', 'internal']
 
 st.set_page_config(page_title='EduPredict · Student risk dashboard', page_icon='🎓', layout='wide', initial_sidebar_state='collapsed')
+
+# Authentication gate: no student data or ML code runs until signed in.
+faculty_name = require_faculty_login()
 
 @st.cache_data
 def load_students() -> pd.DataFrame:
@@ -849,9 +853,12 @@ with st.container(key='app_shell'):
                 if st.button(label, icon=icon, key=f'nav_{page}', use_container_width=True):
                     st.session_state.page = page
                     st.rerun()
+            st.markdown('<div class="nav-section">ACCOUNT</div>', unsafe_allow_html=True)
+            if st.button('Log out', icon=':material/logout:', key='faculty_logout', use_container_width=True):
+                logout_faculty()
     with workspace_col:
         with st.container(key='topbar'):
-            search_col, teacher_col = st.columns([0.76, 0.24], gap='small')
+            search_col, teacher_col = st.columns([0.68, 0.32], gap='small')
             with search_col:
                 if active in ('Overview', 'Students'):
                     query = st.text_input('Search students', placeholder='⌕  Search students...', label_visibility='collapsed', key='top_search')
@@ -859,7 +866,7 @@ with st.container(key='app_shell'):
                     query = ''
                     st.markdown(f'<div class="topbar-context">{escape(PAGE_LABELS.get(active, active))}<small>Use the left menu to change sections · Synthetic demo</small></div>', unsafe_allow_html=True)
             with teacher_col:
-                st.markdown('<div class="teacher-pill"><span class="teacher-avatar">👩🏻‍🏫</span><div><strong>Class Teacher</strong><small>Educator dashboard</small></div></div>',unsafe_allow_html=True)
+                st.markdown(f'<div class="teacher-pill"><span class="teacher-avatar">👩🏻‍🏫</span><div><strong>{escape(faculty_name)}</strong><small>Faculty account</small></div></div>',unsafe_allow_html=True)
         if active != 'Overview':
             if st.button('← Back to Home', key='back_to_home'):
                 st.session_state.page = 'Overview'
