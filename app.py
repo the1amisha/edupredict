@@ -447,6 +447,53 @@ html, body, .stApp, [data-testid="stAppViewContainer"] {
 @media(max-width:900px) {
     .st-key-topbar {top: 0 !important;}
 }
+
+/* EDUPREDICT-FIXED-HEADER-2026-11-V3
+   Use viewport-fixed positioning: Streamlit's nested element wrappers can
+   constrain sticky positioning to the height of the header itself. */
+@media (min-width: 901px) {
+  .st-key-app_shell .st-key-topbar {
+    position: fixed !important;
+    top: 0 !important;
+    /* Match the workspace beside the ~19%-wide sidebar. */
+    left: calc(19vw + 24px) !important;
+    right: 24px !important;
+    width: auto !important;
+    min-height: 66px !important;
+    box-sizing: border-box !important;
+    z-index: 10010 !important;
+    overflow: visible !important;
+    box-shadow: 0 7px 20px rgba(50, 43, 31, 0.13) !important;
+  }
+  /* A fixed element leaves the normal flow. Reserve its original height so
+     the welcome card starts below the header, not behind it. Only the main
+     workspace column contains topbar; the left sidebar is unaffected. */
+  .st-key-app_shell [data-testid="stColumn"]:has(.st-key-topbar) {
+    padding-top: 72px !important;
+    box-sizing: border-box !important;
+  }
+  /* Undo the previous sticky-wrapper attempt: it could stick only within
+     the short containing block and would otherwise interfere with layout. */
+  .st-key-app_shell [data-testid="stElementContainer"]:has(.st-key-topbar):not(:has(.st-key-sidebar)) {
+    position: static !important;
+    top: auto !important;
+  }
+}
+@media (max-width: 900px) {
+  /* Columns stack on small screens; don't overlay the navigation here. */
+  .st-key-app_shell .st-key-topbar {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    z-index: 1 !important;
+    box-shadow: none !important;
+  }
+  .st-key-app_shell [data-testid="stColumn"]:has(.st-key-topbar) {
+    padding-top: 0 !important;
+  }
+}
 </style>
 '''
 
