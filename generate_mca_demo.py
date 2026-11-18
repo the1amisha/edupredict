@@ -21,7 +21,7 @@ SUBJECTS = [
     ('MCA-EL-2303', 'Introduction to Machine Learning', 'Dr. Sandip Kumar Singh Modak', 3, 36, True),
     ('MCA-SEC-2302', 'Machine Learning Lab using Python', 'Dr. Ragini Shukla', 3, 30, True),
     ('MCA-SEC-2301', 'Cyber Law and Information Security', 'Dr. Priyanka Srivastava', 3, 36, True),
-    ('MCA-PCC-2302', 'Operations Research', 'Faculty not specified', 4, 38, True),
+    ('MCA-PCC-2302', 'Operations Research', 'Prof. Aditya Swaroop', 4, 38, True),
     ('MCA-AEC-2301', 'Personality Development Program-II', 'Mr. C. S. Maheta', 1, 22, True),
     ('MCA-P2301', 'Mini Project', 'Faculty not specified', 2, 0, False),
 ]
