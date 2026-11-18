@@ -410,6 +410,43 @@ html, body, .stApp, [data-testid="stAppViewContainer"] {
 .summary-note{font-size:11px;color:#776d5a;line-height:1.5;
   margin:9px 14px 3px;padding:10px 11px;background:#f2eee5;border-radius:10px;}
 @media (max-width:900px){.st-key-app_shell{padding-top:0!important;}}
+
+/* EDUPREDICT-STUDENT-SEARCH-STICKY-2026-11-V2 */
+/* The header remains visible as the user scrolls the main workspace. */
+.st-key-topbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1001 !important;
+    background: #f9f7f2 !important;
+    box-shadow: 0 7px 18px rgba(64, 59, 47, .10) !important;
+    overflow: visible !important;
+}
+/* Streamlit wraps keyed containers in an element. Make that wrapper sticky,
+   otherwise the child may be constrained by a short wrapper during scrolling.
+   Exclude the outer app-shell container, which includes the sidebar. */
+.st-key-app_shell [data-testid="stElementContainer"]:has(.st-key-topbar):not(:has(.st-key-sidebar)) {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+    align-self: stretch !important;
+}
+.st-key-topbar [data-testid="stSelectbox"] {
+    margin-top: 3px !important;
+    margin-bottom: 0 !important;
+}
+.st-key-topbar [data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    background: #f1efeb !important;
+    border: 1px solid #dedbd5 !important;
+    border-radius: 10px !important;
+    min-height: 42px !important;
+}
+.st-key-topbar [data-testid="stSelectbox"] input {
+    color: #494941 !important;
+    font-size: 13px !important;
+}
+@media(max-width:900px) {
+    .st-key-topbar {top: 0 !important;}
+}
 </style>
 '''
 
@@ -839,6 +876,20 @@ def settings_view():
         st.write('**Data:** ' + IDENTITY_NOTE + ' Email addresses are not used. Local student names and IDs must not be committed to a public repository.')
         st.write('**Next step:** develop and validate your model with appropriately permitted, real labelled data before real-world use.')
 
+def open_student_from_header_search() -> None:
+    """Open the selected student's profile before Streamlit reruns the page."""
+    student_id = st.session_state.get('header_student_picker')
+    if student_id is None:
+        return
+    known_ids = set(students['student_id'].astype(str))
+    if str(student_id) not in known_ids:
+        return
+    st.session_state['profile_student_id'] = str(student_id)
+    st.session_state['page'] = 'Profiles'
+    # Clearing here (in a widget callback) permits immediately searching again.
+    st.session_state['header_student_picker'] = None
+
+
 with st.container(key='app_shell'):
     sidebar_col, workspace_col = st.columns([0.19, 0.81], gap='medium')
     with sidebar_col:
@@ -860,11 +911,22 @@ with st.container(key='app_shell'):
         with st.container(key='topbar'):
             search_col, teacher_col = st.columns([0.68, 0.32], gap='small')
             with search_col:
-                if active in ('Overview', 'Students'):
-                    query = st.text_input('Search students', placeholder='⌕  Search students...', label_visibility='collapsed', key='top_search')
-                else:
-                    query = ''
-                    st.markdown(f'<div class="topbar-context">{escape(PAGE_LABELS.get(active, active))}<small>Use the left menu to change sections · Synthetic demo</small></div>', unsafe_allow_html=True)
+                # This native picker supports suggestions by student name or SBU ID.
+                student_names = dict(zip(students['student_id'].astype(str),
+                                         students['name'].astype(str)))
+                student_options = sorted(student_names, key=lambda sid: (student_names[sid].casefold(), sid))
+                st.selectbox(
+                    'Find a student by name or SBU ID',
+                    options=student_options,
+                    index=None,
+                    format_func=lambda sid: f'{student_names[sid]} ({sid})',
+                    placeholder='Search a name or SBU ID — select a suggestion',
+                    label_visibility='collapsed',
+                    key='header_student_picker',
+                    on_change=open_student_from_header_search,
+                    help='Click to see students, or type a name/ID. Enter selects the highlighted match.',
+                )
+                query = ''  # Selected suggestions navigate to a profile; do not filter this page.
             with teacher_col:
                 st.markdown(f'<div class="teacher-pill"><span class="teacher-avatar">👩🏻‍🏫</span><div><strong>{escape(faculty_name)}</strong><small>Faculty account</small></div></div>',unsafe_allow_html=True)
         if active != 'Overview':
