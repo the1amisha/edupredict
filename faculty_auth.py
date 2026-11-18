@@ -1,12 +1,14 @@
 """Lightweight faculty-only sign-in for an EduPredict classroom demonstration.
 
 Credential hashes and salts come from Streamlit secrets, never from GitHub.
-Sessions are per Streamlit browser connection, not durable login cookies.
+A signed browser cookie permits refresh for up to 8 hours (demo only).
 For use with fictional academic outcomes; not production account management.
 """
 from __future__ import annotations
 
+import base64
 import hashlib
+import json
 import hmac
 import time
 from collections.abc import Mapping
@@ -14,6 +16,8 @@ from collections.abc import Mapping
 PBKDF2_ITERATIONS = 600_000
 MAX_ATTEMPTS = 5
 LOCK_SECONDS = 30
+COOKIE_NAME = 'edupredict_faculty_session_v1'
+SESSION_TTL_SECONDS = 8 * 60 * 60  # Eight hours; refresh does not extend it.
 
 
 def password_digest(password: str, salt: bytes) -> str:
@@ -59,17 +63,112 @@ def session_is_valid(session: object, accounts: Mapping) -> bool:
                                     str(record.get('password_hash', ''))))
 
 
+
+
+def make_session_token(session: dict, accounts: Mapping,
+                       *, now: int | None = None, ttl: int = SESSION_TTL_SECONDS) -> str:
+    """Sign an expiry-limited browser token using the *private* account digest.
+
+    Never put passwords, hashes, or raw session dicts into a cookie. Changing an
+    account's password hash invalidates all of that account's old tokens.
+    """
+    if not session_is_valid(session, accounts):
+        raise ValueError('Cannot sign an invalid faculty session')
+    if ttl < 1 or ttl > SESSION_TTL_SECONDS:
+        raise ValueError('Invalid session duration')
+    username = session['username']
+    expiry = int(time.time() if now is None else now) + ttl
+    raw = json.dumps({'username': username, 'expiry': expiry},
+                     sort_keys=True, separators=(',', ':')).encode('utf-8')
+    payload = base64.urlsafe_b64encode(raw).rstrip(b'=').decode('ascii')
+    secret = bytes.fromhex(str(accounts[username]['password_hash']))
+    sig = hmac.new(secret, ('edupredict-v1.' + payload).encode('ascii'),
+                   hashlib.sha256).hexdigest()
+    return 'v1.' + payload + '.' + sig
+
+
+def restore_session_token(token: str | None, accounts: Mapping,
+                          *, now: int | None = None) -> dict | None:
+    """Restore only a signed, unexpired faculty identity from the browser."""
+    if not isinstance(token, str) or len(token) > 1000:
+        return None
+    try:
+        version, payload, signature = token.split('.')
+        if version != 'v1' or len(signature) != 64 or len(payload) > 500:
+            return None
+        decoded = base64.urlsafe_b64decode(payload + '=' * (-len(payload) % 4))
+        body = json.loads(decoded)
+        username = body['username']
+        expiry = body['expiry']
+        instant = int(time.time() if now is None else now)
+        if (not isinstance(username, str) or not isinstance(expiry, int)
+                or expiry <= instant or expiry > instant + SESSION_TTL_SECONDS):
+            return None
+        record = accounts.get(username)
+        if not isinstance(record, Mapping):
+            return None
+        expected_hash = str(record.get('password_hash', ''))
+        if len(expected_hash) != 64:
+            return None
+        secret = bytes.fromhex(expected_hash)
+        correct = hmac.new(secret, ('edupredict-v1.' + payload).encode('ascii'),
+                           hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(correct, signature):
+            return None
+        return {'username': username,
+                'name': str(record.get('display_name', username)),
+                'password_hash': expected_hash}
+    except (ValueError, KeyError, TypeError, UnicodeError, AttributeError,
+            json.JSONDecodeError):
+        return None
+
+
+def browser_cookie_value(st, controller) -> str | None:
+    """Prefer cookies attached to the browser request; fall back to component."""
+    try:
+        value = st.context.cookies.get(COOKIE_NAME)
+        if value:
+            return value
+    except (AttributeError, TypeError, KeyError):
+        pass
+    return controller.get(COOKIE_NAME)
+
 def require_faculty_login() -> str:
     """Block all dashboard work until a faculty credential is accepted."""
     import streamlit as st
+    from streamlit_cookies_controller import CookieController
 
+    # A browser refresh creates a NEW WebSocket/Streamlit session. A signed
+    # cookie lets the new session recover the login without saving a password.
+    controller = CookieController(key='edupredict_faculty_cookie_widget')
     try:
         accounts = st.secrets.get('faculty_users', {})
     except FileNotFoundError:
         accounts = {}
-    current = st.session_state.get('_edupredict_faculty')
-    if session_is_valid(current, accounts):
-        return str(current['name'])
+
+    logout_requested = st.session_state.pop('_edupredict_logout_requested', False)
+    if logout_requested:
+        controller.remove(COOKIE_NAME)
+        st.session_state.pop('_edupredict_faculty', None)
+    else:
+        current = st.session_state.get('_edupredict_faculty')
+        if session_is_valid(current, accounts):
+            # A Streamlit component writes cookies in the browser. Calling
+            # st.rerun() immediately after controller.set() may cancel that
+            # browser-side write. Do it during the *next full page render*.
+            if st.session_state.pop('_edupredict_cookie_write_pending', False):
+                controller.set(
+                    COOKIE_NAME,
+                    make_session_token(current, accounts),
+                    max_age=SESSION_TTL_SECONDS,
+                    same_site='lax',
+                )
+            return str(current['name'])
+        # Cookie is signed by a server-only derived key and expires after 8h.
+        restored = restore_session_token(browser_cookie_value(st, controller), accounts)
+        if restored:
+            st.session_state['_edupredict_faculty'] = restored
+            return str(restored['name'])
     st.session_state.pop('_edupredict_faculty', None)
 
     st.html('''<style>
@@ -103,6 +202,10 @@ def require_faculty_login() -> str:
     if submitted and not remaining:
         result = authenticate(accounts, username, password)
         if result:
+            # Persist only a signed, time-limited identity; never store a password.
+            # Schedule persistence; the next run must finish rendering so
+            # the browser receives the write before any page refresh.
+            st.session_state['_edupredict_cookie_write_pending'] = True
             st.session_state['_edupredict_faculty'] = result
             st.session_state['_edupredict_login_failures'] = 0
             st.session_state['_edupredict_login_locked_until'] = 0
@@ -124,5 +227,6 @@ def logout_faculty() -> None:
     """End the current browser session's sign-in immediately."""
     import streamlit as st
     st.session_state.pop('_edupredict_faculty', None)
+    st.session_state['_edupredict_logout_requested'] = True
     st.session_state['page'] = 'Overview'
     st.rerun()
